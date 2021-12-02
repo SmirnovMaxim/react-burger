@@ -1,0 +1,33 @@
+.mainIngredients {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 425px;
+    padding-right: 8px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 100px;
+}
+
+.firstItem,
+.lastItem {
+   padding-right: 16px;
+}
+
+.cost {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+}
+
+.constructorFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 40px;
+}

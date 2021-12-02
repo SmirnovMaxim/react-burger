@@ -1,0 +1,7 @@
+.ingredient {
+    position: relative;
+}
+
+.price {
+    vertical-align: super;
+}
