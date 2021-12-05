@@ -8,7 +8,6 @@ function App() {
     <div className="text_type_main-default">
       <AppHeader/>
       <main className="container">
-        {/*<h1 className="title">Соберите бургер</h1>*/}
         <div className="body">
           <BurgerIngredientList/>
           <BurgerConstructor/>
