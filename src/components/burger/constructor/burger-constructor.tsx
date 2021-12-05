@@ -10,23 +10,11 @@ import {Types} from "../../../enums";
 function BurgerConstructor() {
   shuffle(data);
 
-  const topIngredient = (): ConstructorItemType => {
+  const getIngredient = (type: 'top' | 'bottom'): ConstructorItemType => {
     const buns = data.filter((item: Ingredient) => item.type === Types.BUN);
     const item = buns[getRandomNumber(buns.length - 1)];
     return {
-      type: 'top',
-      isLocked: Boolean(getRandomNumber(1)),
-      text: item.name,
-      price: item.price,
-      thumbnail: item.image,
-    }
-  };
-
-  const bottomIngredient = (): ConstructorItemType => {
-    const buns = data.filter((item: Ingredient) => item.type === Types.BUN);
-    const item = buns[getRandomNumber(buns.length - 1)];
-    return {
-      type: 'bottom',
+      type,
       isLocked: Boolean(getRandomNumber(1)),
       text: item.name,
       price: item.price,
@@ -48,11 +36,11 @@ function BurgerConstructor() {
   return (
     <section>
       <div className={Styles.list}>
-        <ConstructorItem {...topIngredient()} class={Styles.firstItem}/>
+        <ConstructorItem {...getIngredient('top')} class={Styles.firstItem}/>
         <div className={`${Styles.mainIngredients} scrollable`}>
           {ingredients.map((item, i) => (<ConstructorItem key={`item-${i}`} {...item}/>))}
         </div>
-        <ConstructorItem {...bottomIngredient()} class={Styles.lastItem}/>
+        <ConstructorItem {...getIngredient('bottom')} class={Styles.lastItem}/>
       </div>
 
       <div className={Styles.constructorFooter}>
