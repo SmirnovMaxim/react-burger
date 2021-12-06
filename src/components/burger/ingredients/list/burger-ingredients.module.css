@@ -1,0 +1,47 @@
+.list {
+    width: 50%;
+}
+
+.tabBlock {
+    display: flex;
+    margin-top: 20px;
+}
+
+.tabContent {
+    height: calc(100vh - 275px);
+    padding-right: 10px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.tabContent::-webkit-scrollbar {
+    width: 8px; /* ширина scrollbar */
+}
+
+.tabContent::-webkit-scrollbar-track {
+    background: #2F2F37; /* цвет дорожки */
+}
+
+.tabContent::-webkit-scrollbar-thumb {
+    background-color: #8585AD; /* цвет плашки */
+}
+
+.ingredientGroup {
+    margin: 15px 0;
+}
+
+.title  {
+    margin: 40px 0 0;
+    font-size: 36px;
+    line-height: 40px;
+}
+
+@media (max-width: 768px) {
+    .list {
+        width: unset;
+    }
+
+    .tabBlock > div {
+        min-width: unset;
+    }
+}

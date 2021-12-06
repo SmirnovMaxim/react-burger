@@ -5,10 +5,10 @@ import Styles from './ingredient.module.css';
 import {getRandomNumber} from "../../../utils/helpers";
 
 function Ingredient(props: IngredientType) {
-  let counter = useMemo(() => getRandomNumber(3), []);
+  const counter = useMemo(() => getRandomNumber(3), []);
 
   return (
-    <div className={`text text_type_main-default text-center p-4 ${Styles.ingredient}`}>
+    <div className={`text text_type_main-default p-4 ${Styles.ingredient}`}>
       {counter > 0 && <Counter count={counter}/>}
       <img src={props.image} alt={props.name}/>
       <div>

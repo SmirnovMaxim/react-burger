@@ -1,12 +1,13 @@
-import React, {SyntheticEvent, useEffect, useRef, useState} from 'react';
+import React, {RefObject, SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
-import {GroupIngredient, Ingredient, Tab as TabType} from "../../../../types";
+import {GroupIngredient, Ingredient, Tab as TabType, Coords} from "../../../../types";
 import {Types} from '../../../../enums';
-import Styles from './burger-ingredient-list.module.css';
-import data from '../../../../utils/data.json';
+import Styles from './burger-ingredients.module.css';
 import IngredientGroup from '../group/ingredient-group';
 
-function BurgerIngredientList() {
+const OFFSET = 88 + 80 + 76 + 15;
+
+function BurgerIngredients(props: Ingredient[]) {
   const [tabs, setTabs] = useState<TabType[]>([]);
   const [currentTab, setCurrentTab] = useState<TabType>();
   const [groups, setGroups] = useState<GroupIngredient[]>([
@@ -27,38 +28,40 @@ function BurgerIngredientList() {
     },
   ]);
 
-  const ingredients: Ingredient[] = data;
-  const groupRefs: any = {};
+  const ingredients: Ingredient[] = Object.values(props);
+  const groupRefs: Record<Types, RefObject<HTMLDivElement>> = {
+    [Types.BUN]: useRef<HTMLDivElement>(null),
+    [Types.SAUCE]: useRef<HTMLDivElement>(null),
+    [Types.MAIN]: useRef<HTMLDivElement>(null),
+  }
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const offset = 88 + 80 + 76 + 15;
 
   const onChangeTab = (tab: TabType): void => {
     setCurrentTab(tab);
     if (contentRef.current) {
-      contentRef.current.scrollTop = groupRefs[tab.type].offsetTop - offset;
+      contentRef.current.scrollTop = (groupRefs[tab.type].current?.offsetTop || 0) - OFFSET;
     }
   };
   const onScroll = (e: SyntheticEvent) => {
     let {scrollTop} = e.currentTarget;
-    scrollTop += offset;
-    const coords = Object.keys(groupRefs).map((type: string) => ({
-      type,
-      top: groupRefs[type].offsetTop,
-    }));
-    let result: any = null;
+    scrollTop += OFFSET;
 
-    coords.forEach((_) => {
-      if ((!result && scrollTop >= _.top) || (scrollTop >= _.top && scrollTop >= result.top)) {
-        result = _;
+    const types: Types[] = Object.keys(groupRefs).map(type => type as Types);
+    const coords: Coords[] = types.map((type) => ({
+      type,
+      top: groupRefs[type].current?.offsetTop || 0,
+    }));
+    let result: Coords | null = null;
+
+    coords.forEach((coord) => {
+      if ((!result && scrollTop >= coord.top) || (result  &&  scrollTop >= coord.top && scrollTop >= result.top)) {
+        result = coord;
       }
     })
 
-    if (result) {
-      const tab = tabs.find(_ => _.type === result.type);
-      if (tab) {
-        setCurrentTab(tab);
-      }
+    const tab = tabs.find(tab => tab.type === result?.type);
+    if (tab) {
+      setCurrentTab(tab);
     }
   }
   const isActiveTab = (type: Types): boolean => currentTab?.type === type;
@@ -67,7 +70,7 @@ function BurgerIngredientList() {
     const result: GroupIngredient[] = groups;
 
     ingredients.forEach((ingredient) => {
-      const type: Types = ingredient.type as Types;
+      const type = ingredient.type;
       const index = result.findIndex(group => group.type === type);
 
       if (index >= 0) {
@@ -86,7 +89,7 @@ function BurgerIngredientList() {
 
   return (
     <section className={Styles.list}>
-      <h1 className="title">Соберите бургер</h1>
+      <h1 className={Styles.title}>Соберите бургер</h1>
       <div className={Styles.tabBlock}>
         {tabs.map((tab) => (
           <Tab key={tab.type} value={tab.name} active={isActiveTab(tab.type)}
@@ -95,9 +98,9 @@ function BurgerIngredientList() {
           </Tab>
         ))}
       </div>
-      <div className={`${Styles.tabContent} scrollable`} ref={contentRef} onScroll={onScroll}>
+      <div className={Styles.tabContent} ref={contentRef} onScroll={onScroll}>
         {groups.map((group: GroupIngredient) => (
-          <div ref={val => groupRefs[group.type] = val} key={group.type} className={Styles.ingredientGroup}>
+          <div ref={groupRefs[group.type]} key={group.type} className={Styles.ingredientGroup}>
             <IngredientGroup group={group}/>
           </div>
         ))}
@@ -106,4 +109,4 @@ function BurgerIngredientList() {
   );
 }
 
-export default BurgerIngredientList;
+export default BurgerIngredients;
