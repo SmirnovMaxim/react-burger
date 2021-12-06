@@ -4,6 +4,7 @@ const shuffle = <T extends any[]>(arr: T) => {
     let j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
+  return array;
 }
 
 const getRandomNumber = (limit: number) => Math.round(Math.random() * limit);

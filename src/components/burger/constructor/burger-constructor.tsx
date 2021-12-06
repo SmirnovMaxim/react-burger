@@ -7,9 +7,7 @@ import {getRandomNumber, shuffle} from "../../../utils/helpers";
 import {Types} from "../../../enums";
 
 function BurgerConstructor(props: Ingredient[]) {
-  const data: Ingredient[] = Object.values(props);
-
-  shuffle(data);
+  const data: Ingredient[] = shuffle(Object.values(props));
 
   const getIngredient = (type: 'top' | 'bottom'): ConstructorItemType => {
     const buns = data.filter((item: Ingredient) => item.type === Types.BUN);
