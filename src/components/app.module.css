@@ -1,0 +1,11 @@
+.container {
+    margin: auto;
+    width: 1240px;
+    height: calc(100vh - 128px);
+}
+
+.body {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}

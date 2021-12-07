@@ -1,0 +1,13 @@
+h2 {
+    margin: 15px 0;
+}
+.ingredients {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+@media (max-width: 768px) {
+    .ingredients {
+        grid-template-columns: 100%;
+    }
+}

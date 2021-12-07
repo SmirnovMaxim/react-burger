@@ -1,0 +1,8 @@
+.item {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    min-width: 30px;
+}

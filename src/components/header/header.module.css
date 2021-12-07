@@ -1,0 +1,42 @@
+.header {
+    background-color: #1C1C21;
+}
+
+.nav {
+    display: flex;
+    width: 1240px;
+    margin: auto;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav svg {
+    vertical-align: top;
+    padding-right: 8px;
+}
+
+.item {
+    margin: 16px 4px;
+    padding: 16px 20px;
+}
+
+.item:first-child {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.item:last-child {
+    padding-right: 0;
+    margin-right: 0;
+}
+
+.logo {
+    margin: 0 110px;
+    flex-grow: 1;
+}
+
+@media (max-width: 768px) {
+    .navList li:not(.brand) {
+        display: none;
+    }
+}
