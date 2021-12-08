@@ -1,13 +1,13 @@
 import React, {RefObject, SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
-import {GroupIngredient, Ingredient, Tab as TabType, Coords} from "../../../../types";
+import {Coords, GroupIngredient, Ingredient, IngredientProps, Tab as TabType} from "../../../../types";
 import {Types} from '../../../../enums';
 import Styles from './burger-ingredients.module.css';
 import IngredientGroup from '../group/ingredient-group';
 
 const OFFSET = 88 + 80 + 76 + 15;
 
-function BurgerIngredients(props: Ingredient[]) {
+function BurgerIngredients(props: IngredientProps) {
   const [tabs, setTabs] = useState<TabType[]>([]);
   const [currentTab, setCurrentTab] = useState<TabType>();
   const [groups, setGroups] = useState<GroupIngredient[]>([
@@ -28,12 +28,12 @@ function BurgerIngredients(props: Ingredient[]) {
     },
   ]);
 
-  const ingredients: Ingredient[] = Object.values(props);
+  const ingredients: Ingredient[] = props.ingredients;
   const groupRefs: Record<Types, RefObject<HTMLDivElement>> = {
     [Types.BUN]: useRef<HTMLDivElement>(null),
     [Types.SAUCE]: useRef<HTMLDivElement>(null),
     [Types.MAIN]: useRef<HTMLDivElement>(null),
-  }
+  };
   const contentRef = useRef<HTMLDivElement>(null);
 
   const onChangeTab = (tab: TabType): void => {
@@ -41,7 +41,7 @@ function BurgerIngredients(props: Ingredient[]) {
     if (contentRef.current) {
       contentRef.current.scrollTop = (groupRefs[tab.type].current?.offsetTop || 0) - OFFSET;
     }
-  };
+  }
   const onScroll = (e: SyntheticEvent) => {
     let {scrollTop} = e.currentTarget;
     scrollTop += OFFSET;
@@ -54,7 +54,7 @@ function BurgerIngredients(props: Ingredient[]) {
     let result: Coords | null = null;
 
     coords.forEach((coord) => {
-      if ((!result && scrollTop >= coord.top) || (result  &&  scrollTop >= coord.top && scrollTop >= result.top)) {
+      if ((!result && scrollTop >= coord.top) || (result && scrollTop >= coord.top && scrollTop >= result.top)) {
         result = coord;
       }
     })
@@ -70,8 +70,7 @@ function BurgerIngredients(props: Ingredient[]) {
     const result: GroupIngredient[] = groups;
 
     ingredients.forEach((ingredient) => {
-      const type = ingredient.type;
-      const index = result.findIndex(group => group.type === type);
+      const index = result.findIndex(group => group.type === ingredient.type);
 
       if (index >= 0) {
         result[index].items.push(ingredient);

@@ -1,6 +1,7 @@
 .ingredient {
     position: relative;
     text-align: center;
+    cursor: pointer;
 }
 
 .price {
