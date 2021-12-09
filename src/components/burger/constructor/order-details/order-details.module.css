@@ -1,18 +1,5 @@
-.modalContent {
-    position: relative;
-    background-color: #1C1C21;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    border-radius: 40px;
-    outline: 0;
-    -webkit-box-shadow: 0 3px 9px rgb(0 0 0 / 50%);
+.content {
     padding: 60px 40px 120px;
-    border: 1px solid rgba(76, 76, 255, 0.2);
-    box-shadow: 0 24px 32px rgba(0, 0, 0, 0.04), 0 16px 24px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.04);
-}
-
-.modalHeader {
-    float: right;
 }
 
 .body {

@@ -1,12 +1,13 @@
-import React, {memo, useState} from 'react';
+import React, {memo, useMemo, useState} from 'react';
 import {Ingredient as IngredientType} from '../../../types';
 import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import Styles from './ingredient.module.css';
 import {getRandomNumber} from "../../../utils/helpers";
 import IngredientDetails from "./ingredient-details/ingredient-details";
+import Modal from "../../elements/modal/modal";
 
 const Ingredient = memo((props: IngredientType) => {
-  const counter = getRandomNumber(3);
+  const counter = useMemo(() => getRandomNumber(3), []);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
@@ -20,7 +21,12 @@ const Ingredient = memo((props: IngredientType) => {
         </div>
         <div>{props.name}</div>
       </div>
-      {showModal && <IngredientDetails ingredient={props} onClose={() => setShowModal(false)}/>}
+      {
+        showModal &&
+        <Modal onClose={() => setShowModal(false)}>
+          <IngredientDetails {...props}/>
+        </Modal>
+      }
     </>
   )
 })
