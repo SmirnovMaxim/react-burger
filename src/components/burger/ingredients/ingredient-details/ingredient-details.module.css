@@ -1,0 +1,47 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    width: 520px;
+    margin: auto;
+    align-items: center;
+}
+
+.img {
+    width: 480px;
+}
+
+.name {
+    margin: 16px 0 0;
+    line-height: 30px;
+    font-weight: normal;
+}
+
+.composition {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 32px;
+}
+
+.compositionItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px
+}
+
+.compositionValue {
+    font-size: 28px;
+    line-height: 24px;
+}
+
+.content {
+    padding: 40px 40px 60px;
+}
+
+.header {
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 40px;
+    margin: 0;
+}

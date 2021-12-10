@@ -9,3 +9,11 @@
     flex-direction: row;
     gap: 40px;
 }
+
+.alertDanger {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    height: inherit;
+    align-items: center;
+}
