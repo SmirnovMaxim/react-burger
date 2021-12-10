@@ -9,16 +9,17 @@ const modalRoot = document.getElementById('modals') || document.createElement('d
 
 function Modal(props: BaseModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const { onClose } = props;
 
   useEffect(() => {
     const onKeyPress = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
-        props.onClose();
+        onClose();
       }
     }
     const onClick = (e: MouseEvent) => {
       if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
-        props.onClose();
+        onClose();
       }
     }
 
@@ -29,7 +30,7 @@ function Modal(props: BaseModalProps) {
       document.removeEventListener('keyup', onKeyPress);
       document.removeEventListener('click', onClick);
     };
-  }, [props]);
+  }, [onClose]);
 
   return createPortal(
     <>
@@ -37,7 +38,7 @@ function Modal(props: BaseModalProps) {
         <div ref={dialogRef} className={Styles.modalDialog}>
           <div className={Styles.modalContent}>
             <span className={Styles.closeButton}>
-              <CloseIcon type="primary" onClick={props.onClose}/>
+              <CloseIcon type="primary" onClick={onClose}/>
             </span>
             {props.children}
           </div>
