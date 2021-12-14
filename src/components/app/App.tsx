@@ -5,6 +5,8 @@ import BurgerConstructor from "../burger/constructor/burger-constructor";
 import Styles from './app.module.css';
 import {Ingredient} from "../../types";
 import {API} from '../../config/params';
+import {BurgerContext, ErrorContext} from "../../contexts";
+import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
 function App() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -40,15 +42,20 @@ function App() {
         {
           error &&
           <div className={Styles.alertDanger}>
-            <span>{error}</span>
+            <span className={Styles.errorMessage}>{error}</span>
+            <CloseIcon type="primary" onClick={() => setError(null)}/>
           </div>
         }
         <div className={Styles.body}>
           {
             hasIngredients &&
             <>
-              <BurgerIngredients ingredients={ingredients}/>
-              <BurgerConstructor ingredients={ingredients}/>
+              <BurgerContext.Provider value={ingredients}>
+                <BurgerIngredients/>
+                <ErrorContext.Provider value={{error, setError}}>
+                  <BurgerConstructor/>
+                </ErrorContext.Provider>
+              </BurgerContext.Provider>
             </>
           }
         </div>

@@ -1,44 +1,70 @@
-import React, {useMemo, useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import ConstructorItem from "./item/item";
 import {Button, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {ConstructorItem as ConstructorItemType, Ingredient, IngredientProps} from "../../../types";
+import {ConstructorItem as ConstructorItemType, Ingredient, OrderDetailProps} from "../../../types";
 import Styles from './burger-constructor.module.css';
-import {getRandomNumber, shuffle} from "../../../utils/helpers";
+import {getRandomBun, getIngredient, shuffle} from "../../../utils/helpers";
 import {Types} from "../../../enums";
 import OrderDetails from "./order-details/order-details";
 import Modal from "../../elements/modal/modal";
+import {BurgerContext, ErrorContext} from "../../../contexts";
+import {API} from "../../../config/params";
 
-const getIngredient = (data: Ingredient[], type: 'top' | 'bottom'): ConstructorItemType => {
-  const buns = data.filter((item: Ingredient) => item.type === Types.BUN);
-  const item = buns[getRandomNumber(buns.length - 1)];
-  const text = type === 'top' ? `${item.name} (верх)` : `${item.name} (низ)`;
+function BurgerConstructor() {
+  const { setError } = useContext(ErrorContext);
+  let data: Ingredient[] = useContext(BurgerContext);
+  data = useMemo(() => shuffle(data), [data]);
 
-  return {
-    type,
-    text,
-    isLocked: true,
-    price: item.price,
-    thumbnail: item.image,
-  }
-};
-
-function BurgerConstructor(props: IngredientProps) {
-  const data: Ingredient[] = useMemo(() => shuffle(props.ingredients), [props.ingredients]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [orderDetailProps, setOrderDetailProps] = useState<OrderDetailProps | null>(null);
 
   const ingredients = data.filter((item) => item.type !== Types.BUN)
     .slice(0, 7)
     .map((item: Ingredient): ConstructorItemType => {
       return {
+        id: item._id,
         text: item.name,
         price: item.price,
         thumbnail: item.image,
       };
     });
 
-  const totalCost = ingredients.reduce((result, current) => result + current.price, 0);
-  const topIngredient = useMemo(() => getIngredient(data, 'top'), [data]);
-  const bottomIngredient = useMemo(() => getIngredient(data, 'bottom'), [data]);
+  const randomBun = useMemo(() => getRandomBun(data), [data]);
+  const totalCost = ingredients.reduce((result, current) => result + current.price, randomBun.price * 2);
+  const topIngredient = useMemo(() => getIngredient(randomBun, 'top'), [randomBun]);
+  const bottomIngredient = useMemo(() => getIngredient(randomBun, 'bottom'), [randomBun]);
+
+  const onCreateOrder = async () => {
+    try {
+      const body = {
+        ingredients: [
+          ...ingredients,
+          topIngredient,
+          bottomIngredient,
+        ].map((ingredient: ConstructorItemType) => ingredient.id),
+      };
+      const response = await fetch(`${API}orders`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      if (!response.ok) {
+        const data = JSON.parse(await response.text());
+        throw Error(`Error: ${response.status}, ${data.message}`);
+      }
+      const {success, order} = await response.json();
+      if (!success) {
+        throw Error(`Failed parse data`);
+      }
+      setOrderDetailProps({ id: order.number });
+      setShowModal(true);
+    } catch (e) {
+      const message = (e as Error).message;
+      setError(message);
+    }
+  }
 
   return (
     <section>
@@ -55,12 +81,12 @@ function BurgerConstructor(props: IngredientProps) {
           <span className="mr-2">{totalCost}</span>
           <CurrencyIcon type="primary"/>
         </span>
-        <Button onClick={() => setShowModal(true)}>Оформить заказ</Button>
+        <Button onClick={onCreateOrder}>Оформить заказ</Button>
       </div>
       {
-        showModal &&
+        showModal && orderDetailProps &&
         <Modal onClose={() => setShowModal(false)}>
-          <OrderDetails/>
+          <OrderDetails {...orderDetailProps}/>
         </Modal>
       }
     </section>

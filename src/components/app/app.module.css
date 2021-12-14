@@ -14,6 +14,18 @@
     display: flex;
     justify-content: center;
     font-size: 30px;
-    height: inherit;
     align-items: center;
+    margin-top: 30px;
+    border: 1px solid #e91e63;
+    border-radius: 4px;
+    padding: 5px 20px;
+}
+
+.errorMessage {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.alertDanger svg {
+    cursor: pointer;
 }

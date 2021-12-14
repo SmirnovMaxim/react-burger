@@ -1,18 +1,17 @@
-import React, {memo, useMemo, useState} from 'react';
+import React, {memo, useContext, useMemo} from 'react';
 import {Ingredient as IngredientType} from '../../../types';
 import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import Styles from './ingredient.module.css';
 import {getRandomNumber} from "../../../utils/helpers";
-import IngredientDetails from "./ingredient-details/ingredient-details";
-import Modal from "../../elements/modal/modal";
+import {ModalIngredientContext} from "../../../contexts";
 
 const Ingredient = memo((props: IngredientType) => {
   const counter = useMemo(() => getRandomNumber(3), []);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const onShowModal = useContext(ModalIngredientContext);
 
   return (
     <>
-      <div className={`text text_type_main-default p-4 ${Styles.ingredient}`} onClick={() => setShowModal(true)}>
+      <div className={`text text_type_main-default p-4 ${Styles.ingredient}`} onClick={() => onShowModal(props)}>
         {counter > 0 && <Counter count={counter}/>}
         <img src={props.image} alt={props.name}/>
         <div>
@@ -21,12 +20,6 @@ const Ingredient = memo((props: IngredientType) => {
         </div>
         <div>{props.name}</div>
       </div>
-      {
-        showModal &&
-        <Modal onClose={() => setShowModal(false)}>
-          <IngredientDetails {...props}/>
-        </Modal>
-      }
     </>
   )
 })
