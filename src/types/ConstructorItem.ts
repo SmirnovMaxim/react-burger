@@ -1,4 +1,5 @@
 type ConstructorItem = {
+  id: string;
   type?: 'top' | 'bottom';
   isLocked?: boolean;
   handleClose?: () => void;

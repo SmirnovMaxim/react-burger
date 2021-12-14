@@ -1,11 +1,12 @@
 import Styles from './order-details.module.css';
 import Icon from '../../../../images/icon-done.svg';
+import {OrderDetailProps} from "../../../../types";
 
-function OrderDetails() {
+function OrderDetails(props: OrderDetailProps) {
   return (
     <div className={Styles.content}>
       <div className={Styles.body}>
-        <span className={`${Styles.orderNumber} text text_type_digits-large`}>065952</span>
+        <span className={`${Styles.orderNumber} text text_type_digits-large`}>{props.id}</span>
         <h2 className={Styles.orderTitle}>идентификатор заказа</h2>
         <img className={Styles.icon} src={Icon} alt="Done"/>
         <div className={Styles.description}>
