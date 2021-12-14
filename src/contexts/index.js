@@ -1,7 +1,9 @@
-import IngredientsContext from "./IngredientsContext";
+import BurgerContext from "./BurgerContext";
 import ErrorContext from "./ErrorContext";
+import ModalIngredientContext from './ModalIngredientContext';
 
 export {
-  IngredientsContext,
+  BurgerContext,
   ErrorContext,
+  ModalIngredientContext,
 }

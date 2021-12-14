@@ -5,7 +5,7 @@ import BurgerConstructor from "../burger/constructor/burger-constructor";
 import Styles from './app.module.css';
 import {Ingredient} from "../../types";
 import {API} from '../../config/params';
-import {ErrorContext, IngredientsContext} from "../../contexts";
+import {BurgerContext, ErrorContext} from "../../contexts";
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
 function App() {
@@ -50,12 +50,12 @@ function App() {
           {
             hasIngredients &&
             <>
-              <BurgerIngredients ingredients={ingredients}/>
-              <ErrorContext.Provider value={{ error, setError }}>
-                <IngredientsContext.Provider value={ingredients}>
+              <BurgerContext.Provider value={ingredients}>
+                <BurgerIngredients/>
+                <ErrorContext.Provider value={{error, setError}}>
                   <BurgerConstructor/>
-                </IngredientsContext.Provider>
-              </ErrorContext.Provider>
+                </ErrorContext.Provider>
+              </BurgerContext.Provider>
             </>
           }
         </div>

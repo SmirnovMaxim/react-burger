@@ -7,12 +7,12 @@ import {getRandomBun, getIngredient, shuffle} from "../../../utils/helpers";
 import {Types} from "../../../enums";
 import OrderDetails from "./order-details/order-details";
 import Modal from "../../elements/modal/modal";
-import {IngredientsContext, ErrorContext} from "../../../contexts";
+import {BurgerContext, ErrorContext} from "../../../contexts";
 import {API} from "../../../config/params";
 
 function BurgerConstructor() {
   const { setError } = useContext(ErrorContext);
-  let data: Ingredient[] = useContext(IngredientsContext);
+  let data: Ingredient[] = useContext(BurgerContext);
   data = useMemo(() => shuffle(data), [data]);
 
   const [showModal, setShowModal] = useState<boolean>(false);
