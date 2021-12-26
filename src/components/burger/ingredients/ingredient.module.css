@@ -7,3 +7,8 @@
 .price {
     vertical-align: super;
 }
+
+.content {
+    position: relative;
+    z-index: 1;
+}

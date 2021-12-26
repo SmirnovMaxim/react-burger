@@ -5,7 +5,7 @@ import ModalOverlay from "./overlay/modal-overlay";
 import {BaseModalProps} from "../../../types";
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
-const modalRoot = document.getElementById('modals') || document.createElement('div');
+const modalRoot = document.getElementById('modals')!;
 
 function Modal(props: BaseModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);

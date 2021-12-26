@@ -1,16 +1,19 @@
-import React, {RefObject, SyntheticEvent, useContext, useEffect, useRef, useState} from 'react';
-import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
-import {Coords, GroupIngredient, Ingredient, Tab as TabType} from "../../../../types";
+import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
+import React, {RefObject, SyntheticEvent, useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {Types} from '../../../../enums';
-import Styles from './burger-ingredients.module.css';
+import {RESET_INGREDIENT} from '../../../../services/actions/app';
+import {Coords, GroupIngredient, Tab as TabType} from '../../../../types';
+import {TRootStore} from '../../../../types/stores';
+import Modal from '../../../elements/modal/modal';
 import IngredientGroup from '../group/ingredient-group';
-import {BurgerContext, ModalIngredientContext} from "../../../../contexts";
-import Modal from "../../../elements/modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import Styles from './burger-ingredients.module.css';
 
 const OFFSET = 88 + 80 + 76 + 15;
 
 function BurgerIngredients() {
+  const dispatch = useDispatch();
   const [tabs, setTabs] = useState<TabType[]>([]);
   const [currentTab, setCurrentTab] = useState<TabType>();
   const [groups, setGroups] = useState<GroupIngredient[]>([
@@ -30,9 +33,11 @@ function BurgerIngredients() {
       items: [],
     },
   ]);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentIngredient, setCurrentIngredient] = useState<Ingredient | null>(null);
-  const ingredients: Ingredient[] = useContext(BurgerContext);
+
+  const {currentIngredient, ingredients} = useSelector((store: TRootStore) => ({
+    currentIngredient: store.app.ingredient,
+    ingredients: store.app.ingredients,
+  }));
 
   const groupRefs: Record<Types, RefObject<HTMLDivElement>> = {
     [Types.BUN]: useRef<HTMLDivElement>(null),
@@ -70,10 +75,7 @@ function BurgerIngredients() {
     }
   }
   const isActiveTab = (type: Types): boolean => currentTab?.type === type;
-  const onShowModal = (ingredient: Ingredient) => {
-    setCurrentIngredient(ingredient);
-    setShowModal(true);
-  }
+  const onCloseModal = () => dispatch({type: RESET_INGREDIENT});
 
   useEffect(() => {
     const result: GroupIngredient[] = groups;
@@ -86,11 +88,13 @@ function BurgerIngredients() {
       }
     })
     setGroups(result);
-    setTabs(result.map((group) => ({
+  }, []);
+  useEffect(() => {
+    setTabs(groups.map((group) => ({
       name: group.name,
       type: group.type,
     })));
-  }, []);
+  }, [groups]);
   useEffect(() => {
     setCurrentTab(tabs[0]);
   }, [tabs]);
@@ -106,18 +110,16 @@ function BurgerIngredients() {
           </Tab>
         ))}
       </div>
-      <ModalIngredientContext.Provider value={onShowModal}>
-        <div className={Styles.tabContent} ref={contentRef} onScroll={onScroll}>
-          {groups.map((group: GroupIngredient) => (
-            <div ref={groupRefs[group.type]} key={group.type} className={Styles.ingredientGroup}>
-              <IngredientGroup group={group}/>
-            </div>
-          ))}
-        </div>
-      </ModalIngredientContext.Provider>
+      <div className={Styles.tabContent} ref={contentRef} onScroll={onScroll}>
+        {groups.map((group: GroupIngredient) => (
+          <div ref={groupRefs[group.type]} key={group.type} className={Styles.ingredientGroup}>
+            <IngredientGroup group={group}/>
+          </div>
+        ))}
+      </div>
       {
-        showModal && currentIngredient &&
-        <Modal onClose={() => setShowModal(false)}>
+        currentIngredient &&
+        <Modal onClose={onCloseModal}>
           <IngredientDetails {...currentIngredient}/>
         </Modal>
       }

@@ -1,10 +1,12 @@
-import BaseModalProps from "./BaseModalProps";
-import ConstructorItem from "./ConstructorItem";
-import Coords from "./Coords";
-import GroupIngredient from "./GroupIngredient";
-import Ingredient from "./Ingredient";
-import OrderDetailProps from "./OrderDetailProps";
-import Tab from "./Tab";
+import BaseModalProps from './BaseModalProps';
+import ConstructorItem from './ConstructorItem';
+import Coords from './Coords';
+import GroupIngredient from './GroupIngredient';
+import Ingredient from './Ingredient';
+import {CurrentOrder, Order} from './Order';
+import OrderDetailProps from './OrderDetailProps';
+import Tab from './Tab';
+import TDragItem from './TDragItem';
 
 export type {
   BaseModalProps,
@@ -12,6 +14,9 @@ export type {
   Coords,
   GroupIngredient,
   Ingredient,
+  CurrentOrder,
+  Order,
   OrderDetailProps,
   Tab,
+  TDragItem,
 }

@@ -1,5 +1,5 @@
-import {ConstructorItem as ConstructorItemType, Ingredient} from "../types";
-import {Types} from "../enums";
+import {Types} from '../enums';
+import {ConstructorItem as ConstructorItemType, Ingredient} from '../types';
 
 const shuffle = <T extends any[]>(arr: T) => {
   const array = [...arr];
@@ -12,27 +12,33 @@ const shuffle = <T extends any[]>(arr: T) => {
 
 const getRandomNumber = (limit: number) => Math.round(Math.random() * limit);
 
-const getIngredient = (item: Ingredient, type: 'top' | 'bottom'): ConstructorItemType => {
-  const text = type === 'top' ? `${item.name} (верх)` : `${item.name} (низ)`;
+const getIngredient = (item: Ingredient, position?: 'top' | 'bottom'): ConstructorItemType => {
+  let text: string;
+
+  switch (position) {
+    case 'top':
+      text = `${item.name} (верх)`;
+      break;
+    case 'bottom':
+      text = `${item.name} (низ)`;
+      break;
+    default:
+      text = item.name;
+  }
 
   return {
     id: item._id,
-    type,
+    type: item.type,
+    position,
     text,
-    isLocked: true,
+    isLocked: item.type === Types.BUN,
     price: item.price,
     thumbnail: item.image,
   }
-};
-
-const getRandomBun = (data: Ingredient[]): Ingredient => {
-  const buns = data.filter((item: Ingredient) => item.type === Types.BUN);
-  return buns[getRandomNumber(buns.length - 1)];
 };
 
 export {
   shuffle,
   getRandomNumber,
   getIngredient,
-  getRandomBun,
 };

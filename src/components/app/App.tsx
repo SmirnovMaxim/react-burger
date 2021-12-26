@@ -1,39 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import React, {useEffect, useMemo} from 'react';
+import {DndProvider} from 'react-dnd';
+import {HTML5Backend} from 'react-dnd-html5-backend';
+import {useDispatch, useSelector} from 'react-redux';
+import {getIngredients, RESET_ERROR} from '../../services/actions/app';
+import {TRootStore} from '../../types/stores';
+import BurgerConstructor from '../burger/constructor/burger-constructor';
+import BurgerIngredients from '../burger/ingredients/list/burger-ingredients';
 import AppHeader from '../header/app-header';
-import BurgerIngredients from "../burger/ingredients/list/burger-ingredients";
-import BurgerConstructor from "../burger/constructor/burger-constructor";
 import Styles from './app.module.css';
-import {Ingredient} from "../../types";
-import {API} from '../../config/params';
-import {BurgerContext, ErrorContext} from "../../contexts";
-import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
 function App() {
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const {ingredients, error} = useSelector((store: TRootStore) => store.app);
+  const hasIngredients = useMemo(() => (ingredients || []).length > 0, [ingredients]);
 
   useEffect(() => {
-    const fetchIngredients = async () => {
-      try {
-        const response = await fetch(`${API}ingredients`);
-        if (!response.ok) {
-          throw Error(`Error: ${response.status}`);
-        }
-        const {success, data} = await response.json();
-        if (!success) {
-          throw Error(`Failed parse data`);
-        }
-        setIngredients(data);
-      } catch (e) {
-        const message = (e as Error).message;
-        setError(message);
-      }
-    }
+    dispatch(getIngredients());
+  }, [dispatch]);
 
-    fetchIngredients();
-  }, []);
-
-  const hasIngredients = ingredients.length > 0;
+  const onCloseError = () => dispatch({type: RESET_ERROR});
 
   return (
     <div className="text_type_main-default">
@@ -43,20 +29,16 @@ function App() {
           error &&
           <div className={Styles.alertDanger}>
             <span className={Styles.errorMessage}>{error}</span>
-            <CloseIcon type="primary" onClick={() => setError(null)}/>
+            <CloseIcon type="primary" onClick={onCloseError}/>
           </div>
         }
         <div className={Styles.body}>
           {
             hasIngredients &&
-            <>
-              <BurgerContext.Provider value={ingredients}>
-                <BurgerIngredients/>
-                <ErrorContext.Provider value={{error, setError}}>
-                  <BurgerConstructor/>
-                </ErrorContext.Provider>
-              </BurgerContext.Provider>
-            </>
+            <DndProvider backend={HTML5Backend}>
+              <BurgerIngredients/>
+              <BurgerConstructor/>
+            </DndProvider>
           }
         </div>
       </main>

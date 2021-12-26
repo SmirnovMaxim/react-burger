@@ -1,92 +1,107 @@
-import React, {useContext, useMemo, useState} from 'react';
-import ConstructorItem from "./item/item";
-import {Button, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {ConstructorItem as ConstructorItemType, Ingredient, OrderDetailProps} from "../../../types";
+import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import cn from 'classnames';
+import React, {useMemo} from 'react';
+import {useDrop} from 'react-dnd';
+import {useDispatch, useSelector} from 'react-redux';
+import {DragEventTypes, Types} from '../../../enums';
+import {ADD_INGREDIENT_TO_ORDER, createOrder, RESET_CURRENT_ORDER} from '../../../services/actions/order';
+import {TDragItem} from '../../../types';
+import {TRootStore} from '../../../types/stores';
+import {getIngredient} from '../../../utils/helpers';
+import Modal from '../../elements/modal/modal';
 import Styles from './burger-constructor.module.css';
-import {getRandomBun, getIngredient, shuffle} from "../../../utils/helpers";
-import {Types} from "../../../enums";
-import OrderDetails from "./order-details/order-details";
-import Modal from "../../elements/modal/modal";
-import {BurgerContext, ErrorContext} from "../../../contexts";
-import {API} from "../../../config/params";
+import ConstructorItem from './item/item';
+import OrderDetails from './order-details/order-details';
 
 function BurgerConstructor() {
-  const { setError } = useContext(ErrorContext);
-  let data: Ingredient[] = useContext(BurgerContext);
-  data = useMemo(() => shuffle(data), [data]);
+  const dispatch = useDispatch();
+  const [{isHover}, drop] = useDrop(() => ({
+    accept: [Types.BUN, Types.MAIN, Types.SAUCE],
+    drop: (item: TDragItem) => onDrop(item),
+    collect: monitor => ({
+      isHover: monitor.isOver(),
+    }),
+  }));
+  const {ingredients, orderNumber, currentOrder} = useSelector((store: TRootStore) => {
+    const {currentOrder, currentOrderNumber: orderNumber} = store.order;
+    return {
+      ingredients: store.app.ingredients,
+      orderNumber,
+      currentOrder,
+    };
+  });
 
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [orderDetailProps, setOrderDetailProps] = useState<OrderDetailProps | null>(null);
+  const mainIngredients = useMemo(
+    () => currentOrder?.ingredients.filter(el => el.type !== Types.BUN) || [],
+    [currentOrder],
+  );
+  const topIngredient = currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'top');
+  const bottomIngredient = currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'bottom');
 
-  const ingredients = data.filter((item) => item.type !== Types.BUN)
-    .slice(0, 7)
-    .map((item: Ingredient): ConstructorItemType => {
-      return {
-        id: item._id,
-        text: item.name,
-        price: item.price,
-        thumbnail: item.image,
-      };
-    });
+  const totalCost = currentOrder?.ingredients.reduce((result, current) => result + current.price, 0) || 0;
+  const isOrderEmpty = useMemo(() => totalCost === 0, [totalCost]);
 
-  const randomBun = useMemo(() => getRandomBun(data), [data]);
-  const totalCost = ingredients.reduce((result, current) => result + current.price, randomBun.price * 2);
-  const topIngredient = useMemo(() => getIngredient(randomBun, 'top'), [randomBun]);
-  const bottomIngredient = useMemo(() => getIngredient(randomBun, 'bottom'), [randomBun]);
-
-  const onCreateOrder = async () => {
-    try {
-      const body = {
-        ingredients: [
-          ...ingredients,
-          topIngredient,
-          bottomIngredient,
-        ].map((ingredient: ConstructorItemType) => ingredient.id),
-      };
-      const response = await fetch(`${API}orders`, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      if (!response.ok) {
-        const data = JSON.parse(await response.text());
-        throw Error(`Error: ${response.status}, ${data.message}`);
-      }
-      const {success, order} = await response.json();
-      if (!success) {
-        throw Error(`Failed parse data`);
-      }
-      setOrderDetailProps({ id: order.number });
-      setShowModal(true);
-    } catch (e) {
-      const message = (e as Error).message;
-      setError(message);
+  const onCreateOrder = () => {
+    if (currentOrder) {
+      dispatch(createOrder(currentOrder.ingredients));
     }
-  }
+  };
+  const onCloseModal = () => dispatch({type: RESET_CURRENT_ORDER});
+  const onDrop = (dropItem: TDragItem) => {
+    const item = ingredients.find(item => item._id === dropItem.id);
+    if (!item || dropItem.event === DragEventTypes.MOVE) {
+      return;
+    }
+
+    if (item.type === Types.BUN) {
+      dispatch({
+        type: ADD_INGREDIENT_TO_ORDER,
+        value: getIngredient(item, 'top'),
+      });
+      dispatch({
+        type: ADD_INGREDIENT_TO_ORDER,
+        value: getIngredient(item, 'bottom'),
+      });
+      return;
+    }
+
+    dispatch({
+      type: ADD_INGREDIENT_TO_ORDER,
+      value: getIngredient(item),
+      index: dropItem.index,
+    });
+  };
 
   return (
-    <section>
-      <div className={Styles.list}>
-        <ConstructorItem {...topIngredient} class={Styles.firstItem}/>
-        <div className={Styles.mainIngredients}>
-          {ingredients.map((item, i) => (<ConstructorItem key={`item-${i}`} {...item}/>))}
+    <section ref={drop} className={Styles.constructorSection}>
+      {
+        isOrderEmpty &&
+        <div className={cn(Styles.listEmpty, {[Styles.listEmptyHover]: isHover})}>
+          <span>Перетащите сюда ингредиенты</span>
         </div>
-        <ConstructorItem {...bottomIngredient} class={Styles.lastItem}/>
+      }
+      <div className={Styles.list}>
+        {topIngredient && <ConstructorItem {...topIngredient} class={Styles.firstItem}/>}
+        <div className={Styles.mainIngredients}>
+          {mainIngredients.map((item, i) => (<ConstructorItem index={i} key={`item-${i}`} {...item}/>))}
+        </div>
+        {bottomIngredient && <ConstructorItem {...bottomIngredient} class={Styles.lastItem}/>}
       </div>
 
-      <div className={Styles.constructorFooter}>
-        <span className={`${Styles.cost} text text_type_digits-medium`}>
-          <span className="mr-2">{totalCost}</span>
-          <CurrencyIcon type="primary"/>
-        </span>
-        <Button onClick={onCreateOrder}>Оформить заказ</Button>
-      </div>
       {
-        showModal && orderDetailProps &&
-        <Modal onClose={() => setShowModal(false)}>
-          <OrderDetails {...orderDetailProps}/>
+        !isOrderEmpty &&
+        <div className={Styles.constructorFooter}>
+          <span className={`${Styles.cost} text text_type_digits-medium`}>
+            <span className="mr-2">{totalCost}</span>
+            <CurrencyIcon type="primary"/>
+          </span>
+          <Button onClick={onCreateOrder}>Оформить заказ</Button>
+        </div>
+      }
+      {
+        orderNumber &&
+        <Modal onClose={onCloseModal}>
+          <OrderDetails id={orderNumber}/>
         </Modal>
       }
     </section>

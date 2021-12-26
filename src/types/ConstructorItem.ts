@@ -1,8 +1,10 @@
+import {Types} from '../enums';
+
 type ConstructorItem = {
   id: string;
-  type?: 'top' | 'bottom';
+  type: Types;
   isLocked?: boolean;
-  handleClose?: () => void;
+  position?: 'top' | 'bottom';
   text: string;
   thumbnail: string;
   price: number;
