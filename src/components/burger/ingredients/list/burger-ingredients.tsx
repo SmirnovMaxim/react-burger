@@ -2,7 +2,7 @@ import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import React, {RefObject, SyntheticEvent, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Types} from '../../../../enums';
-import {RESET_INGREDIENT} from '../../../../services/actions/app';
+import {RESET_INGREDIENT, TOGGLE_MODAL} from '../../../../services/actions/detailModal';
 import {Coords, GroupIngredient, Tab as TabType} from '../../../../types';
 import {TRootStore} from '../../../../types/stores';
 import Modal from '../../../elements/modal/modal';
@@ -34,9 +34,10 @@ function BurgerIngredients() {
     },
   ]);
 
-  const {currentIngredient, ingredients} = useSelector((store: TRootStore) => ({
-    currentIngredient: store.app.ingredient,
+  const {currentIngredient, ingredients, showModal} = useSelector((store: TRootStore) => ({
+    currentIngredient: store.detailModal.ingredient,
     ingredients: store.app.ingredients,
+    showModal: store.detailModal.showModal,
   }));
 
   const groupRefs: Record<Types, RefObject<HTMLDivElement>> = {
@@ -75,7 +76,10 @@ function BurgerIngredients() {
     }
   }
   const isActiveTab = (type: Types): boolean => currentTab?.type === type;
-  const onCloseModal = () => dispatch({type: RESET_INGREDIENT});
+  const onCloseModal = () => {
+    dispatch({type: RESET_INGREDIENT});
+    dispatch({type: TOGGLE_MODAL, value: false});
+  };
 
   useEffect(() => {
     const result: GroupIngredient[] = groups;
@@ -118,7 +122,7 @@ function BurgerIngredients() {
         ))}
       </div>
       {
-        currentIngredient &&
+        showModal && currentIngredient &&
         <Modal onClose={onCloseModal}>
           <IngredientDetails {...currentIngredient}/>
         </Modal>

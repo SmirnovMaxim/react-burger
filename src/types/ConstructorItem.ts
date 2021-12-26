@@ -2,6 +2,7 @@ import {Types} from '../enums';
 
 type ConstructorItem = {
   id: string;
+  uniqueId: string;
   type: Types;
   isLocked?: boolean;
   position?: 'top' | 'bottom';

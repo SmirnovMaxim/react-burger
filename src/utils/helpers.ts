@@ -1,3 +1,5 @@
+// @ts-ignore
+import {v4 as uuidv4} from 'uuid';
 import {Types} from '../enums';
 import {ConstructorItem as ConstructorItemType, Ingredient} from '../types';
 
@@ -28,6 +30,7 @@ const getIngredient = (item: Ingredient, position?: 'top' | 'bottom'): Construct
 
   return {
     id: item._id,
+    uniqueId: uuidv4(),
     type: item.type,
     position,
     text,

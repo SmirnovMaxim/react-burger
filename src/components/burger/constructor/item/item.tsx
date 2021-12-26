@@ -4,7 +4,7 @@ import React, {useRef} from 'react';
 import {DropTargetMonitor, useDrag, useDrop, XYCoord} from 'react-dnd';
 import {useDispatch} from 'react-redux';
 import {DragEventTypes, Types} from '../../../../enums';
-import {MOVE_INGREDIENTS, REMOVE_INGREDIENT_FROM_ORDER} from '../../../../services/actions/order';
+import {MOVE_INGREDIENTS, REMOVE_INGREDIENT_FROM_ORDER} from '../../../../services/actions/burgerConstructor';
 import {ConstructorItem as ConstructorItemType, TDragItem} from '../../../../types';
 import Styles from './item.module.css';
 
@@ -44,7 +44,7 @@ function ConstructorItem(props: TConstructorItemProps) {
     if (isBun) {
       return;
     }
-    dispatch({type: REMOVE_INGREDIENT_FROM_ORDER, value: props.index});
+    dispatch({type: REMOVE_INGREDIENT_FROM_ORDER, value: props.uniqueId});
   }
   const onHover = (item: TDragItem, monitor: DropTargetMonitor) => {
     if (!ref.current) {

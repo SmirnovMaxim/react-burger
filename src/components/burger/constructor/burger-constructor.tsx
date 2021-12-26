@@ -4,7 +4,8 @@ import React, {useMemo} from 'react';
 import {useDrop} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
 import {DragEventTypes, Types} from '../../../enums';
-import {ADD_INGREDIENT_TO_ORDER, createOrder, RESET_CURRENT_ORDER} from '../../../services/actions/order';
+import {ADD_INGREDIENT_TO_ORDER, RESET_CURRENT_ORDER} from '../../../services/actions/burgerConstructor';
+import {createOrder} from '../../../services/actions/order';
 import {TDragItem} from '../../../types';
 import {TRootStore} from '../../../types/stores';
 import {getIngredient} from '../../../utils/helpers';
@@ -22,23 +23,20 @@ function BurgerConstructor() {
       isHover: monitor.isOver(),
     }),
   }));
-  const {ingredients, orderNumber, currentOrder} = useSelector((store: TRootStore) => {
-    const {currentOrder, currentOrderNumber: orderNumber} = store.order;
-    return {
-      ingredients: store.app.ingredients,
-      orderNumber,
-      currentOrder,
-    };
-  });
+  const {ingredients, orderNumber, currentOrder} = useSelector((store: TRootStore) => ({
+    ingredients: store.app.ingredients,
+    currentOrder: store.burgerConstructor.currentOrder,
+    orderNumber: store.burgerConstructor.currentOrderNumber,
+  }));
 
   const mainIngredients = useMemo(
     () => currentOrder?.ingredients.filter(el => el.type !== Types.BUN) || [],
     [currentOrder],
   );
-  const topIngredient = currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'top');
-  const bottomIngredient = currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'bottom');
+  const topIngredient = useMemo(() => currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'top'), [currentOrder]);
+  const bottomIngredient = useMemo(() => currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'bottom'), [currentOrder]);
 
-  const totalCost = currentOrder?.ingredients.reduce((result, current) => result + current.price, 0) || 0;
+  const totalCost = useMemo(() => currentOrder?.ingredients.reduce((result, current) => result + current.price, 0) || 0, [currentOrder]);
   const isOrderEmpty = useMemo(() => totalCost === 0, [totalCost]);
 
   const onCreateOrder = () => {
@@ -83,7 +81,7 @@ function BurgerConstructor() {
       <div className={Styles.list}>
         {topIngredient && <ConstructorItem {...topIngredient} class={Styles.firstItem}/>}
         <div className={Styles.mainIngredients}>
-          {mainIngredients.map((item, i) => (<ConstructorItem index={i} key={`item-${i}`} {...item}/>))}
+          {mainIngredients.map((item, i) => (<ConstructorItem index={i} key={item.uniqueId} {...item}/>))}
         </div>
         {bottomIngredient && <ConstructorItem {...bottomIngredient} class={Styles.lastItem}/>}
       </div>
