@@ -6,7 +6,6 @@ import Ingredient from './Ingredient';
 import {CurrentOrder, Order} from './Order';
 import OrderDetailProps from './OrderDetailProps';
 import Tab from './Tab';
-import TDragItem from './TDragItem';
 
 export type {
   BaseModalProps,
@@ -18,5 +17,4 @@ export type {
   Order,
   OrderDetailProps,
   Tab,
-  TDragItem,
 }

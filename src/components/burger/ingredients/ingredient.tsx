@@ -3,9 +3,8 @@ import cn from 'classnames';
 import React, {memo, useCallback} from 'react';
 import {useDrag} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
-import {DragEventTypes} from '../../../enums';
 import {SET_INGREDIENT, TOGGLE_MODAL} from '../../../services/actions/detailModal';
-import {Ingredient as IngredientType, TDragItem} from '../../../types';
+import {Ingredient as IngredientType} from '../../../types';
 import {TRootStore} from '../../../types/stores';
 import Styles from './ingredient.module.css';
 
@@ -15,12 +14,8 @@ const Ingredient = memo((props: IngredientType) => {
     return store.burgerConstructor.currentOrder?.ingredients.filter(_ => _.id === props._id)?.length || 0;
   });
   const [, drag] = useDrag(() => ({
-    type: props.type,
-    item: (): TDragItem => ({
-      id: props._id,
-      index: 0,
-      event: DragEventTypes.ADD,
-    }),
+    type: 'newIngredient',
+    item: {id: props._id},
   }));
   const onShowDetails = useCallback(() => {
     dispatch({type: SET_INGREDIENT, ingredient: props});

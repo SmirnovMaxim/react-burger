@@ -1,34 +1,41 @@
+:root {
+    --scrollbar-padding: 90px;
+}
+
 .constructorSection {
     width: calc(50% - 40px);
 }
 
-.mainIngredients {
-    gap: 10px;
-    display: flex;
-    flex-direction: column;
-    max-height: 425px;
-    padding-right: 8px;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-}
-
-.mainIngredients::-webkit-scrollbar {
+.list::-webkit-scrollbar {
     width: 8px; /* ширина scrollbar */
 }
 
-.mainIngredients::-webkit-scrollbar-track {
+.list::-webkit-scrollbar-track {
     background: #2F2F37; /* цвет дорожки */
 }
 
-.mainIngredients::-webkit-scrollbar-thumb {
+.list::-webkit-scrollbar-thumb {
     background-color: #8585AD; /* цвет плашки */
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+    border: var(--scrollbar-padding) solid rgba(255,255,255,0);
+}
+
+.list::-webkit-scrollbar-thumb,
+.list::-webkit-scrollbar-track {
+    border: var(--scrollbar-padding) solid rgba(255,255,255,0);
+    background-clip: padding-box;
 }
 
 .list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     margin-top: 100px;
+    max-height: 598px;
+    padding-right: 8px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 .listEmpty {

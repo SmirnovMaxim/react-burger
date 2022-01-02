@@ -2,7 +2,6 @@ import {Dispatch} from 'redux';
 import {API} from '../../config/params';
 import {ConstructorItem, Order} from '../../types';
 import {SET_ERROR} from './app';
-import {SET_CURRENT_ORDER_NUMBER} from './burgerConstructor';
 
 export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
 export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
@@ -34,7 +33,6 @@ export const createOrder = (ingredients: ConstructorItem[]) => {
       const order: Order = {number: data.number, ingredients};
 
       dispatch({type: CREATE_ORDER_SUCCESS, order});
-      dispatch({type: SET_CURRENT_ORDER_NUMBER, value: order.number});
     } catch (e) {
       dispatch({type: CREATE_ORDER_ERROR});
       if (e instanceof Error) {

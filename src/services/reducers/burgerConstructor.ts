@@ -6,38 +6,38 @@ import {
   ADD_INGREDIENT_TO_ORDER,
   MOVE_INGREDIENTS,
   REMOVE_INGREDIENT_FROM_ORDER,
-  RESET_CURRENT_ORDER, SET_CURRENT_ORDER_NUMBER,
+  RESET_CURRENT_ORDER,
 } from '../actions/burgerConstructor';
 
 const initialState: TBurgerConstructorStore = {
   currentOrder: null,
-  currentOrderNumber: null,
 }
 
 export const burgerConstructor = (state: CombinedState<TBurgerConstructorStore> = initialState, action: any): TBurgerConstructorStore => {
   switch (action.type) {
     case RESET_CURRENT_ORDER:
-      return {...state, currentOrder: null, currentOrderNumber: null};
-    case SET_CURRENT_ORDER_NUMBER:
-      return {...state, currentOrderNumber: action.value};
+      return {...state, currentOrder: null};
     case ADD_INGREDIENT_TO_ORDER:
       const value: ConstructorItem = action.value;
       if (!state.currentOrder) {
         return {...state, currentOrder: {ingredients: [value]}};
       }
 
-      const isBun = value.type === Types.BUN;
       let {ingredients} = state.currentOrder;
+      const isBun = value.type === Types.BUN;
+      const hasBuns = ingredients.some(_ => _.type === Types.BUN);
 
       if (isBun) {
         // замена булки
         ingredients = ingredients.map(_ => _.position === value.position && _.type === value.type ? value : _);
         // добавление
-        if (!ingredients.find(_ => _.position === value.position && _.type === value.type)) {
-          ingredients.push(value);
+        const existBun = ingredients.some(_ => _.position === value.position && _.type === value.type);
+        if (!existBun) {
+          const isTop = value.position === 'top';
+          isTop ? ingredients.splice(0, 0, value) : ingredients.push(value);
         }
       } else {
-        ingredients.splice(-2, 0, value);
+        ingredients.splice(hasBuns ? ingredients.length - 1 : ingredients.length, 0, value);
       }
 
       return {...state, currentOrder: {ingredients}};
@@ -65,9 +65,10 @@ export const burgerConstructor = (state: CombinedState<TBurgerConstructorStore> 
 
         const {dragIndex, hoverIndex} = action;
         const ingredients = [...state.currentOrder.ingredients];
-        const movedIngredient = ingredients[hoverIndex];
-        ingredients[hoverIndex] = ingredients[dragIndex];
-        ingredients[dragIndex] = movedIngredient;
+        const dragIngredient = ingredients[dragIndex];
+
+        ingredients.splice(dragIndex, 1);
+        ingredients.splice(hoverIndex, 0, dragIngredient);
 
         return {...state, currentOrder: {ingredients}};
       }

@@ -1,12 +1,11 @@
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useDrop} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
-import {DragEventTypes, Types} from '../../../enums';
+import {Types} from '../../../enums';
 import {ADD_INGREDIENT_TO_ORDER, RESET_CURRENT_ORDER} from '../../../services/actions/burgerConstructor';
 import {createOrder} from '../../../services/actions/order';
-import {TDragItem} from '../../../types';
 import {TRootStore} from '../../../types/stores';
 import {getIngredient} from '../../../utils/helpers';
 import Modal from '../../elements/modal/modal';
@@ -17,37 +16,40 @@ import OrderDetails from './order-details/order-details';
 function BurgerConstructor() {
   const dispatch = useDispatch();
   const [{isHover}, drop] = useDrop(() => ({
-    accept: [Types.BUN, Types.MAIN, Types.SAUCE],
-    drop: (item: TDragItem) => onDrop(item),
+    accept: 'newIngredient',
+    drop: ({id}: { id: string }) => onDrop(id),
     collect: monitor => ({
       isHover: monitor.isOver(),
     }),
   }));
-  const {ingredients, orderNumber, currentOrder} = useSelector((store: TRootStore) => ({
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const {orderNumber, mainIngredients, ingredients} = useSelector((store: TRootStore) => ({
     ingredients: store.app.ingredients,
-    currentOrder: store.burgerConstructor.currentOrder,
-    orderNumber: store.burgerConstructor.currentOrderNumber,
+    mainIngredients: store.burgerConstructor.currentOrder?.ingredients || [],
+    orderNumber: store.order.orders.length > 0 ? store.order.orders[store.order.orders.length - 1].number : null,
   }));
 
-  const mainIngredients = useMemo(
-    () => currentOrder?.ingredients.filter(el => el.type !== Types.BUN) || [],
-    [currentOrder],
-  );
-  const topIngredient = useMemo(() => currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'top'), [currentOrder]);
-  const bottomIngredient = useMemo(() => currentOrder?.ingredients.find(el => el.type === Types.BUN && el.position === 'bottom'), [currentOrder]);
-
-  const totalCost = useMemo(() => currentOrder?.ingredients.reduce((result, current) => result + current.price, 0) || 0, [currentOrder]);
+  const totalCost = useMemo(() => mainIngredients.reduce((result, current) => result + current.price, 0) || 0, [mainIngredients]);
   const isOrderEmpty = useMemo(() => totalCost === 0, [totalCost]);
 
+  useEffect(() => {
+    if (orderNumber) {
+      setShowModal(true);
+    }
+  }, [orderNumber]);
+
   const onCreateOrder = () => {
-    if (currentOrder) {
-      dispatch(createOrder(currentOrder.ingredients));
+    if (mainIngredients.length) {
+      dispatch(createOrder(mainIngredients));
     }
   };
-  const onCloseModal = () => dispatch({type: RESET_CURRENT_ORDER});
-  const onDrop = (dropItem: TDragItem) => {
-    const item = ingredients.find(item => item._id === dropItem.id);
-    if (!item || dropItem.event === DragEventTypes.MOVE) {
+  const onCloseModal = () => {
+    setShowModal(false);
+    dispatch({type: RESET_CURRENT_ORDER});
+  };
+  const onDrop = (id: string) => {
+    const item = ingredients.find(item => item._id === id);
+    if (!item) {
       return;
     }
 
@@ -66,10 +68,8 @@ function BurgerConstructor() {
     dispatch({
       type: ADD_INGREDIENT_TO_ORDER,
       value: getIngredient(item),
-      index: dropItem.index,
     });
-  };
-
+  }
   return (
     <section ref={drop} className={Styles.constructorSection}>
       {
@@ -78,28 +78,25 @@ function BurgerConstructor() {
           <span>Перетащите сюда ингредиенты</span>
         </div>
       }
-      <div className={Styles.list}>
-        {topIngredient && <ConstructorItem {...topIngredient} class={Styles.firstItem}/>}
-        <div className={Styles.mainIngredients}>
-          {mainIngredients.map((item, i) => (<ConstructorItem index={i} key={item.uniqueId} {...item}/>))}
-        </div>
-        {bottomIngredient && <ConstructorItem {...bottomIngredient} class={Styles.lastItem}/>}
-      </div>
-
       {
         !isOrderEmpty &&
-        <div className={Styles.constructorFooter}>
-          <span className={`${Styles.cost} text text_type_digits-medium`}>
-            <span className="mr-2">{totalCost}</span>
-            <CurrencyIcon type="primary"/>
-          </span>
-          <Button onClick={onCreateOrder}>Оформить заказ</Button>
-        </div>
+        <>
+          <div className={Styles.list}>
+            {mainIngredients.map((item, i) => (<ConstructorItem index={i} key={item.uniqueId} {...item}/>))}
+          </div>
+          <div className={Styles.constructorFooter}>
+            <span className={`${Styles.cost} text text_type_digits-medium`}>
+              <span className="mr-2">{totalCost}</span>
+              <CurrencyIcon type="primary"/>
+            </span>
+            <Button onClick={onCreateOrder}>Оформить заказ</Button>
+          </div>
+        </>
       }
       {
-        orderNumber &&
+        showModal &&
         <Modal onClose={onCloseModal}>
-          <OrderDetails id={orderNumber}/>
+          <OrderDetails id={orderNumber!}/>
         </Modal>
       }
     </section>

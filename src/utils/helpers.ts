@@ -1,20 +1,9 @@
 // @ts-ignore
 import {v4 as uuidv4} from 'uuid';
 import {Types} from '../enums';
-import {ConstructorItem as ConstructorItemType, Ingredient} from '../types';
+import {ConstructorItem, Ingredient} from '../types';
 
-const shuffle = <T extends any[]>(arr: T) => {
-  const array = [...arr];
-  for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-const getRandomNumber = (limit: number) => Math.round(Math.random() * limit);
-
-const getIngredient = (item: Ingredient, position?: 'top' | 'bottom'): ConstructorItemType => {
+const getIngredient = (item: Ingredient, position?: 'top' | 'bottom'): ConstructorItem => {
   let text: string;
 
   switch (position) {
@@ -41,7 +30,5 @@ const getIngredient = (item: Ingredient, position?: 'top' | 'bottom'): Construct
 };
 
 export {
-  shuffle,
-  getRandomNumber,
   getIngredient,
 };
