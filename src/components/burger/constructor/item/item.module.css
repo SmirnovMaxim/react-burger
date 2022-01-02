@@ -1,8 +1,27 @@
 .item {
     display: flex;
     align-items: center;
+    padding-bottom: 10px;
+}
+
+.item:not(.bun) {
+    cursor: move;
 }
 
 .icon {
     min-width: 30px;
+}
+
+.bun {
+    position: sticky;
+    background: #131316;
+}
+
+.bun:first-child {
+    top: 0;
+}
+
+.bun:last-child {
+    bottom: 0;
+    padding-bottom: 0;
 }
