@@ -1,16 +1,19 @@
 import {Button, Input, PasswordInput} from '@ya.praktikum/react-developer-burger-ui-components';
 import {ChangeEvent, SyntheticEvent, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {Link, useHistory} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Routes} from '../enums';
-import {confirmResetPassword} from '../services/actions/auth';
-import './common.css';
+import {confirmResetPassword} from '../services/actions/resetPassword';
 import {TConfirmRestorePasswordForm} from '../types/forms';
+import {TRootStore} from '../types/stores';
+import './common.css';
 import Styles from './login.module.css';
 
 export const ResetPasswordPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const {state} = useLocation();
+  const {isSendForgotPassword} = useSelector((store: TRootStore) => store.resetPassword);
   const [form, setForm] = useState<TConfirmRestorePasswordForm>({
     password: '',
     token: '',
@@ -28,11 +31,10 @@ export const ResetPasswordPage = () => {
   }
 
   useEffect(() => {
-    const isAllowResetPassword = localStorage.getItem('isAllowResetPassword');
-    if (!isAllowResetPassword) {
+    if (!isSendForgotPassword && !state) {
       history.replace({pathname: Routes.FORGOT_PASSWORD});
     }
-  }, [history]);
+  }, [isSendForgotPassword, history, state]);
 
   return (
     <div className={Styles.container}>
