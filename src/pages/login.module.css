@@ -1,0 +1,45 @@
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 180px;
+}
+
+.login {
+    width: 480px;
+    text-align: center;
+}
+
+.input {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.btnLogin {
+    margin-top: 24px;
+}
+
+.firstLine {
+    margin-top: 80px;
+}
+
+.secondLine {
+    margin-top: 16px;
+}
+
+.firstLine,
+.secondLine {
+    display: flex;
+    justify-content: center;
+    column-gap: 8px;
+}
+
+.firstLine span:nth-child(1),
+.secondLine span:nth-child(1) {
+    color: #8585AD;
+}
+
+.firstLine a,
+.secondLine a {
+    color: #4C4CFF;
+    text-decoration: none;
+}

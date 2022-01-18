@@ -3,6 +3,7 @@ import {TRootStore} from '../../types/stores';
 import {app} from './app';
 import {burgerConstructor} from './burgerConstructor';
 import {detailModal} from './detailModal';
+import {user} from './user';
 import {order} from './order';
 
 export const rootReducer = combineReducers<TRootStore>({
@@ -10,4 +11,5 @@ export const rootReducer = combineReducers<TRootStore>({
   burgerConstructor,
   detailModal,
   order,
+  user,
 });

@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    margin-top: 120px;
+    gap: 60px;
+}
+
+.profile {
+    width: 480px;
+}
+
+aside {
+    width: 320px;
+}
+
+aside ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 80px;
+}
+
+aside ul li {
+    color: #8585AD;
+    line-height: 64px;
+    cursor: pointer;
+}
+
+aside ul a {
+    text-decoration: none;
+    color: #8585AD;
+}
+
+.activeLink {
+    color: #fff;
+}
+
+.input {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.actions {
+    margin-top: 24px;
+}
