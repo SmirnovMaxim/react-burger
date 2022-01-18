@@ -3,6 +3,8 @@ import cn from 'classnames';
 import React, {memo, useCallback} from 'react';
 import {useDrag} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
+import {useHistory, useLocation} from 'react-router-dom';
+import {Routes} from '../../../enums';
 import {SET_INGREDIENT, TOGGLE_MODAL} from '../../../services/actions/detailModal';
 import {Ingredient as IngredientType} from '../../../types';
 import {TRootStore} from '../../../types/stores';
@@ -10,6 +12,8 @@ import Styles from './ingredient.module.css';
 
 const Ingredient = memo((props: IngredientType) => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
   const counter = useSelector((store: TRootStore) => {
     return store.burgerConstructor.currentOrder?.ingredients.filter(_ => _.id === props._id)?.length || 0;
   });
@@ -20,7 +24,12 @@ const Ingredient = memo((props: IngredientType) => {
   const onShowDetails = useCallback(() => {
     dispatch({type: SET_INGREDIENT, ingredient: props});
     dispatch({type: TOGGLE_MODAL, value: true});
-  }, [dispatch, props]);
+
+    history.replace({
+      pathname: Routes.INGREDIENT_VIEW.replace(/:id/, props._id),
+      state: {modal: location},
+    })
+  }, [dispatch, props, history, location]);
 
   return (
     <div className={cn('text text_type_main-default p-4', Styles.ingredient)} onClick={onShowDetails}>

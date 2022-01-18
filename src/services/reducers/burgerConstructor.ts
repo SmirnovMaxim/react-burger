@@ -7,6 +7,7 @@ import {
   MOVE_INGREDIENTS,
   REMOVE_INGREDIENT_FROM_ORDER,
   RESET_CURRENT_ORDER,
+  SET_NUMBER,
 } from '../actions/burgerConstructor';
 
 const initialState: TBurgerConstructorStore = {
@@ -16,7 +17,7 @@ const initialState: TBurgerConstructorStore = {
 export const burgerConstructor = (state: CombinedState<TBurgerConstructorStore> = initialState, action: any): TBurgerConstructorStore => {
   switch (action.type) {
     case RESET_CURRENT_ORDER:
-      return {...state, currentOrder: null};
+      return initialState;
     case ADD_INGREDIENT_TO_ORDER:
       const value: ConstructorItem = action.value;
       if (!state.currentOrder) {
@@ -73,6 +74,8 @@ export const burgerConstructor = (state: CombinedState<TBurgerConstructorStore> 
         return {...state, currentOrder: {ingredients}};
       }
       return moveFn();
+    case SET_NUMBER:
+      return {...state, number: action.number};
     default:
       return state;
   }

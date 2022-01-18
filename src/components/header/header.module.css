@@ -35,6 +35,23 @@
     flex-grow: 1;
 }
 
+.link {
+    color: #8585ad;
+}
+
+.link,
+.activeLink {
+    text-decoration: none;
+}
+
+.activeLink {
+    color: #fff;
+}
+
+.activeLink svg {
+    fill: #fff;
+}
+
 @media (max-width: 768px) {
     .navList li:not(.brand) {
         display: none;

@@ -1,19 +1,15 @@
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import React, {RefObject, SyntheticEvent, useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Types} from '../../../../enums';
-import {RESET_INGREDIENT, TOGGLE_MODAL} from '../../../../services/actions/detailModal';
 import {Coords, GroupIngredient, Tab as TabType} from '../../../../types';
 import {TRootStore} from '../../../../types/stores';
-import Modal from '../../../elements/modal/modal';
 import IngredientGroup from '../group/ingredient-group';
-import IngredientDetails from '../ingredient-details/ingredient-details';
 import Styles from './burger-ingredients.module.css';
 
 const OFFSET = 88 + 80 + 76 + 15;
 
 function BurgerIngredients() {
-  const dispatch = useDispatch();
   const [tabs, setTabs] = useState<TabType[]>([]);
   const [currentTab, setCurrentTab] = useState<TabType>();
   const [groups, setGroups] = useState<GroupIngredient[]>([
@@ -34,8 +30,7 @@ function BurgerIngredients() {
     },
   ]);
 
-  const {currentIngredient, ingredients, showModal} = useSelector((store: TRootStore) => ({
-    currentIngredient: store.detailModal.ingredient,
+  const {ingredients} = useSelector((store: TRootStore) => ({
     ingredients: store.app.ingredients,
     showModal: store.detailModal.showModal,
   }));
@@ -76,10 +71,6 @@ function BurgerIngredients() {
     }
   }
   const isActiveTab = (type: Types): boolean => currentTab?.type === type;
-  const onCloseModal = () => {
-    dispatch({type: RESET_INGREDIENT});
-    dispatch({type: TOGGLE_MODAL, value: false});
-  };
 
   useEffect(() => {
     const result: GroupIngredient[] = groups;
@@ -121,12 +112,6 @@ function BurgerIngredients() {
           </div>
         ))}
       </div>
-      {
-        showModal && currentIngredient &&
-        <Modal onClose={onCloseModal}>
-          <IngredientDetails {...currentIngredient}/>
-        </Modal>
-      }
     </section>
   );
 }

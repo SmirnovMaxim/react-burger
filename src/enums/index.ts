@@ -1,7 +1,7 @@
-import DragEventTypes from './dragEventTypes';
-import Types from "./types";
+import Routes from './routes';
+import Types from './types';
 
 export {
-  DragEventTypes,
-  Types
+  Routes,
+  Types,
 }
