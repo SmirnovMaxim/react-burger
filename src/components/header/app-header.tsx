@@ -22,7 +22,9 @@ function AppHeader() {
           </NavLink>
         </div>
         <div className={`${Styles.logo} ${Styles.item}`}>
-          <Logo/>
+          <NavLink to={Routes.MAIN}>
+            <Logo/>
+          </NavLink>
         </div>
         <div className={Styles.item}>
           <NavLink to={Routes.PROFILE} activeClassName={Styles.activeLink} className={cn(Styles.link, 'text_color_inactive')} exact>

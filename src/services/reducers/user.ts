@@ -1,7 +1,15 @@
 import {CombinedState} from 'redux';
 import {TUserStore} from '../../types/stores';
 import {deleteCookie, setAccessToken} from '../../utils/helpers';
-import {LOGIN_ERROR, LOGIN_SUCCESS, LOGOUT_SUCCESS, SIGNUP_SUCCESS, TOKEN_SUCCESS} from '../actions/auth';
+import {
+  CONFIRM_PASSWORD_RESET_SUCCESS,
+  LOGIN_ERROR,
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+  PASSWORD_RESET_SUCCESS,
+  SIGNUP_SUCCESS,
+  TOKEN_SUCCESS,
+} from '../actions/auth';
 import {FETCH_USER_SUCCESS, UPDATE_USER_SUCCESS} from '../actions/user';
 
 const initialState: TUserStore = {
@@ -28,6 +36,12 @@ export const user = (state: CombinedState<TUserStore> = initialState, action: an
     case FETCH_USER_SUCCESS:
     case UPDATE_USER_SUCCESS:
       return {...state, ...action.user};
+    case PASSWORD_RESET_SUCCESS:
+      localStorage.setItem('isAllowResetPassword', '1');
+      return state;
+    case CONFIRM_PASSWORD_RESET_SUCCESS:
+      localStorage.removeItem('isAllowResetPassword');
+      return state;
     case LOGIN_ERROR:
       return initialState;
     default:

@@ -1,5 +1,5 @@
 import {Button, EmailInput, PasswordInput} from '@ya.praktikum/react-developer-burger-ui-components';
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, SyntheticEvent, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {Routes} from '../enums';
@@ -21,23 +21,28 @@ export const LoginPage = () => {
       [name]: value,
     })
   }
-  const onLogin = () => dispatch(login(form));
+  const onLogin = (e: SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(login(form));
+  };
 
   return (
     <div className={Styles.container}>
       <div className={Styles.login}>
         <div className="text_type_main-medium">Вход</div>
-        <div className={Styles.input}>
-          <EmailInput onChange={onChange} value={form.email} name="email"/>
-        </div>
-        <div className={Styles.input}>
-          <PasswordInput onChange={onChange} value={form.password} name="password"/>
-        </div>
-        <div className={Styles.btnLogin}>
-          <Button type="primary" size="large" onClick={onLogin}>
-            Войти
-          </Button>
-        </div>
+        <form onSubmit={onLogin}>
+          <div className={Styles.input}>
+            <EmailInput onChange={onChange} value={form.email} name="email"/>
+          </div>
+          <div className={Styles.input}>
+            <PasswordInput onChange={onChange} value={form.password} name="password"/>
+          </div>
+          <div className={Styles.btnLogin}>
+            <Button type="primary" size="large">
+              Войти
+            </Button>
+          </div>
+        </form>
         <div className={Styles.firstLine}>
           <span>Вы – новый пользователь?</span>
           <Link to={Routes.SIGNUP}>Зарегистрироваться</Link>

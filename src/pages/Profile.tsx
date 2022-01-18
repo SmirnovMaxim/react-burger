@@ -1,5 +1,5 @@
 import {Button, EmailInput, Input, PasswordInput} from '@ya.praktikum/react-developer-burger-ui-components';
-import {ChangeEvent, useCallback, useEffect, useState} from 'react';
+import {ChangeEvent, SyntheticEvent, useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Sidebar} from '../components/sidebar/sidebar';
 import {updateUser} from '../services/actions/user';
@@ -32,25 +32,35 @@ export const ProfilePage = () => {
     })
   }
 
-  const onSave = () => dispatch(updateUser(form));
+  const onSave = (e: SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(updateUser(form));
+  }
+
+  const onReset = (e: SyntheticEvent) => {
+    e.preventDefault();
+    resetForm();
+  }
 
   return (
     <div className={Styles.container}>
       <Sidebar/>
       <div className={Styles.profile}>
-        <div className={Styles.input}>
-          <Input onChange={onChange} value={form.name} name="name" placeholder="Имя"/>
-        </div>
-        <div className={Styles.input}>
-          <EmailInput onChange={onChange} value={form.email} name="email"/>
-        </div>
-        <div className={Styles.input}>
-          <PasswordInput onChange={onChange} value={form.password} name="password"/>
-        </div>
-        <div className={Styles.actions}>
-          <Button type="primary" onClick={onSave}>Сохранить</Button>
-          <Button type="secondary" onClick={resetForm}>Отменить</Button>
-        </div>
+        <form onSubmit={onSave}>
+          <div className={Styles.input}>
+            <Input onChange={onChange} value={form.name} name="name" placeholder="Имя"/>
+          </div>
+          <div className={Styles.input}>
+            <EmailInput onChange={onChange} value={form.email} name="email"/>
+          </div>
+          <div className={Styles.input}>
+            <PasswordInput onChange={onChange} value={form.password} name="password"/>
+          </div>
+          <div className={Styles.actions}>
+            <Button type="primary">Сохранить</Button>
+            <Button type="secondary" onClick={onReset}>Отменить</Button>
+          </div>
+        </form>
       </div>
     </div>
   );
