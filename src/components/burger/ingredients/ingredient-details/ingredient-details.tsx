@@ -2,6 +2,7 @@ import cn from 'classnames';
 import {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {useLocation, useParams} from 'react-router-dom';
+import {TComposition} from '../../../../types';
 import {TRootStore} from '../../../../types/stores';
 import Styles from './ingredient-details.module.css';
 
@@ -15,7 +16,7 @@ function IngredientDetails() {
 
   if (!ingredient) return (<></>);
 
-  const composition = [
+  const composition: TComposition[] = [
     {
       name: 'Калории, ккал',
       value: ingredient.calories,

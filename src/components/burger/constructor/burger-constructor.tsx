@@ -41,7 +41,7 @@ function BurgerConstructor() {
     }
   }, [orderNumber]);
 
-  const onCreateOrder = () => {
+  const onCreateOrder = (): void => {
     if (!mainIngredients.length) {
       return;
     }
@@ -52,11 +52,11 @@ function BurgerConstructor() {
       dispatch(createOrder(mainIngredients));
     }
   };
-  const onCloseModal = () => {
+  const onCloseModal = (): void => {
     setShowModal(false);
     dispatch({type: RESET_CURRENT_ORDER});
   };
-  const onDrop = (id: string) => {
+  const onDrop = (id: string): void => {
     const item = ingredients.find(item => item._id === id);
     if (!item) {
       return;

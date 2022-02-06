@@ -14,14 +14,14 @@ export const LoginPage = () => {
     email: '',
     password: '',
   });
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const {name, value} = e.target;
     setForm({
       ...form,
       [name]: value,
     })
   }
-  const onLogin = (e: SyntheticEvent) => {
+  const onLogin = (e: SyntheticEvent): void => {
     e.preventDefault();
     dispatch(login(form));
   };

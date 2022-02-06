@@ -18,13 +18,13 @@ export const ResetPasswordPage = () => {
     password: '',
     token: '',
   });
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   }
-  const onReset = async (e: SyntheticEvent) => {
+  const onReset = async (e: SyntheticEvent): Promise<void> => {
     e.preventDefault();
     await dispatch(confirmResetPassword(form));
     history.replace({pathname: Routes.LOGIN});

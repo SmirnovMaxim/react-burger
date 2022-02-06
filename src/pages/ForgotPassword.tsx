@@ -13,12 +13,12 @@ export const ForgotPasswordPage = () => {
   const history = useHistory();
   const {pathname} = useLocation();
   const {isSendForgotPassword} = useSelector((store: TRootStore) => store.resetPassword);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState<string>('');
 
-  const onChange = (e: any) => {
+  const onChange = (e: any): void => {
     setEmail(e.target.value)
   }
-  const onRestore = (e: SyntheticEvent) => {
+  const onRestore = (e: SyntheticEvent): void => {
     e.preventDefault();
     dispatch(resetPassword(email));
   }

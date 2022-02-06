@@ -1,6 +1,6 @@
 import {ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, {useRef} from 'react';
+import React, {FC, useRef} from 'react';
 import {useDrag, useDrop} from 'react-dnd';
 import {useDispatch} from 'react-redux';
 import {Types} from '../../../../enums';
@@ -12,7 +12,7 @@ type TConstructorItemProps = ConstructorItemType & {
   index: number;
 }
 
-function ConstructorItem(props: TConstructorItemProps) {
+const ConstructorItem: FC<TConstructorItemProps> = (props) => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const [{isDragging}, drag] = useDrag(() => ({
@@ -30,13 +30,13 @@ function ConstructorItem(props: TConstructorItemProps) {
   const isBun = props.type === Types.BUN;
   const opacity = isDragging ? 0 : 1;
 
-  const onDeleteItem = () => {
+  const onDeleteItem = (): void => {
     if (isBun) {
       return;
     }
     dispatch({type: REMOVE_INGREDIENT_FROM_ORDER, value: props.uniqueId});
   }
-  const onHover = (item: { index: number }) => {
+  const onHover = (item: { index: number }): void => {
     if (!ref.current) {
       return;
     }

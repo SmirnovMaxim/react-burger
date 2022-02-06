@@ -24,7 +24,7 @@ export const ProfilePage = () => {
     resetForm();
   }, [email, name, password, resetForm]);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const {name, value} = e.target;
     setForm({
       ...form,
@@ -32,12 +32,12 @@ export const ProfilePage = () => {
     })
   }
 
-  const onSave = (e: SyntheticEvent) => {
+  const onSave = (e: SyntheticEvent): void => {
     e.preventDefault();
     dispatch(updateUser(form));
   }
 
-  const onReset = (e: SyntheticEvent) => {
+  const onReset = (e: SyntheticEvent): void => {
     e.preventDefault();
     resetForm();
   }
