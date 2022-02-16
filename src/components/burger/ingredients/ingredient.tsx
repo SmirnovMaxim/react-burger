@@ -1,6 +1,6 @@
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import cn from 'classnames';
-import React, {memo, useCallback} from 'react';
+import React, {FC, memo, useCallback} from 'react';
 import {useDrag} from 'react-dnd';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
@@ -10,7 +10,7 @@ import {Ingredient as IngredientType} from '../../../types';
 import {TRootStore} from '../../../types/stores';
 import Styles from './ingredient.module.css';
 
-const Ingredient = memo((props: IngredientType) => {
+const Ingredient: FC<IngredientType> = memo((props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();

@@ -15,14 +15,14 @@ export const RegisterPage = () => {
     password: '',
     name: '',
   })
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const {name, value} = e.target;
     setForm({
       ...form,
       [name]: value,
     })
   }
-  const onSignup = (e: SyntheticEvent) => {
+  const onSignup = (e: SyntheticEvent): void => {
     e.preventDefault();
     dispatch(signup(form))
   }

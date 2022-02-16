@@ -1,8 +1,9 @@
+import {FC} from 'react';
 import Styles from './order-details.module.css';
 import Icon from '../../../../images/icon-done.svg';
 import {OrderDetailProps} from "../../../../types";
 
-function OrderDetails(props: OrderDetailProps) {
+const OrderDetails: FC<OrderDetailProps> = (props) => {
   return (
     <div className={Styles.content}>
       <div className={Styles.body}>

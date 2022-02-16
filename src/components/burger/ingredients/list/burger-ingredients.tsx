@@ -48,7 +48,7 @@ function BurgerIngredients() {
       contentRef.current.scrollTop = (groupRefs[tab.type].current?.offsetTop || 0) - OFFSET;
     }
   }
-  const onScroll = (e: SyntheticEvent) => {
+  const onScroll = (e: SyntheticEvent): void => {
     let {scrollTop} = e.currentTarget;
     scrollTop += OFFSET;
 

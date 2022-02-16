@@ -1,5 +1,5 @@
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {FC, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Route, Switch, useHistory, useLocation} from 'react-router-dom';
 import {Routes} from '../../enums';
@@ -20,7 +20,7 @@ import {ProtectedRoute} from '../elements/protected-route/protected-route';
 import AppHeader from '../header/app-header';
 import Styles from './app.module.css';
 
-function App() {
+const App: FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();

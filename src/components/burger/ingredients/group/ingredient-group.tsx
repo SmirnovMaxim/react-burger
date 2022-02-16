@@ -1,14 +1,14 @@
 import Styles from "./ingredient-group.module.css";
 import {Ingredient as IngredientType} from "../../../../types";
 import Ingredient from "../ingredient";
-import React from "react";
+import React, {FC} from 'react';
 import {GroupIngredient} from "../../../../types";
 
 interface IProps {
   group: GroupIngredient;
 }
 
-function IngredientGroup({ group }: IProps) {
+const IngredientGroup: FC<IProps> = ({ group }) => {
   return (
     <>
       <h2 id={group.type}>{group.name}</h2>

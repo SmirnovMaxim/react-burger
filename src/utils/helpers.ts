@@ -31,7 +31,7 @@ const getIngredient = (item: Ingredient, position?: 'top' | 'bottom'): Construct
   }
 };
 
-const setCookie = (name: string, value: string, options: { [p: string]: any } = {}) => {
+const setCookie = (name: string, value: string, options: { [p: string]: any } = {}): void => {
   options = {
     path: '/',
     ...options,
@@ -54,7 +54,7 @@ const setCookie = (name: string, value: string, options: { [p: string]: any } = 
   document.cookie = updatedCookie;
 }
 
-const deleteCookie = (name: string) => {
+const deleteCookie = (name: string): void => {
   setCookie(name, '', {'max-age': -1});
 }
 
@@ -69,7 +69,7 @@ const setAccessToken = (token: string): void => {
   setCookie('accessToken', token, {'max-age': 1200});
 }
 
-const updateToken = async (token: string) => {
+const updateToken = async (token: string): Promise<void> => {
   const response = await fetch(`${API}auth/token`, {
     method: 'POST',
     body: JSON.stringify({token}),

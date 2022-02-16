@@ -1,15 +1,14 @@
 import Styles from './modal.module.css';
 import {createPortal} from "react-dom";
-import {useEffect, useRef} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import ModalOverlay from "./overlay/modal-overlay";
 import {BaseModalProps} from "../../../types";
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 
 const modalRoot = document.getElementById('modals')!;
 
-function Modal(props: BaseModalProps) {
+const Modal: FC<BaseModalProps> = ({ onClose, children }) =>  {
   const dialogRef = useRef<HTMLDivElement>(null);
-  const { onClose } = props;
 
   useEffect(() => {
     const onKeyPress = (e: KeyboardEvent) => {
@@ -40,7 +39,7 @@ function Modal(props: BaseModalProps) {
             <span className={Styles.closeButton}>
               <CloseIcon type="primary" onClick={onClose}/>
             </span>
-            {props.children}
+            {children}
           </div>
         </div>
       </div>

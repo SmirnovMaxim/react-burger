@@ -6,6 +6,7 @@ import Ingredient from './Ingredient';
 import {CurrentOrder, Order} from './Order';
 import OrderDetailProps from './OrderDetailProps';
 import Tab from './Tab';
+import TComposition from './TComposition';
 
 export type {
   BaseModalProps,
@@ -17,4 +18,5 @@ export type {
   Order,
   OrderDetailProps,
   Tab,
+  TComposition,
 }
