@@ -1,9 +1,8 @@
 import cn from 'classnames';
 import {useMemo} from 'react';
-import {useSelector} from 'react-redux';
 import {useLocation, useParams} from 'react-router-dom';
+import {useSelector} from '../../../../services/hooks';
 import {TComposition} from '../../../../types';
-import {TRootStore} from '../../../../types/stores';
 import Styles from './ingredient-details.module.css';
 
 function IngredientDetails() {
@@ -11,7 +10,7 @@ function IngredientDetails() {
   const location = useLocation();
   // @ts-ignore
   const isModalOpen = location.state && location.state.modal;
-  const {ingredients} = useSelector((store: TRootStore) => store.app);
+  const {ingredients} = useSelector(store => store.app);
   const ingredient = useMemo(() => ingredients.find(ingredient => ingredient._id === id), [id, ingredients]);
 
   if (!ingredient) return (<></>);

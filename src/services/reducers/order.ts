@@ -1,13 +1,14 @@
-import {CombinedState} from 'redux';
+import {Reducer} from 'redux';
 import {Order} from '../../types';
 import {TOrderStore} from '../../types/stores';
-import {CREATE_ORDER_ERROR, CREATE_ORDER_SUCCESS} from '../actions/order';
+import {TOrderActions} from '../actions/order';
+import {CREATE_ORDER_ERROR, CREATE_ORDER_SUCCESS} from '../constants';
 
 const initialState: TOrderStore = {
   orders: [],
 }
 
-export const order = (state: CombinedState<TOrderStore> = initialState, action: any): TOrderStore => {
+export const order: Reducer<TOrderStore, TOrderActions> = (state = initialState, action): TOrderStore => {
   switch (action.type) {
     case CREATE_ORDER_SUCCESS:
       const order: Order = action.order;

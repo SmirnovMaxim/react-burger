@@ -3,7 +3,7 @@ import {ChangeEvent, SyntheticEvent, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {Routes} from '../enums';
-import {signup} from '../services/actions/auth';
+import {signup} from '../services/actions/user';
 import {TUserStore} from '../types/stores';
 import './common.css';
 import Styles from './login.module.css';

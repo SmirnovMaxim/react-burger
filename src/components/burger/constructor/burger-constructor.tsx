@@ -2,13 +2,12 @@ import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-comp
 import cn from 'classnames';
 import React, {useEffect, useMemo, useState} from 'react';
 import {useDrop} from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Routes, Types} from '../../../enums';
-import {ADD_INGREDIENT_TO_ORDER, RESET_CURRENT_ORDER} from '../../../services/actions/burgerConstructor';
+import {addIngredientToOrder} from '../../../services/actions/burgerConstructor';
 import {createOrder} from '../../../services/actions/order';
-import {TRootStore} from '../../../types/stores';
-import {getIngredient} from '../../../utils/helpers';
+import {RESET_CURRENT_ORDER} from '../../../services/constants';
+import {useDispatch, useSelector} from '../../../services/hooks';
 import Modal from '../../elements/modal/modal';
 import Styles from './burger-constructor.module.css';
 import ConstructorItem from './item/item';
@@ -17,7 +16,7 @@ import OrderDetails from './order-details/order-details';
 function BurgerConstructor() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {name} = useSelector((store: TRootStore) => store.user);
+  const {name} = useSelector(store => store.user);
   const [{isHover}, drop] = useDrop(() => ({
     accept: 'newIngredient',
     drop: ({id}: { id: string }) => onDrop(id),
@@ -26,13 +25,13 @@ function BurgerConstructor() {
     }),
   }));
   const [showModal, setShowModal] = useState<boolean>(false);
-  const {orderNumber, mainIngredients, ingredients} = useSelector((store: TRootStore) => ({
+  const {orderNumber, mainIngredients, ingredients} = useSelector((store) => ({
     ingredients: store.app.ingredients,
     mainIngredients: store.burgerConstructor.currentOrder?.ingredients || [],
     orderNumber: store.burgerConstructor.number,
   }));
 
-  const totalCost = useMemo(() => mainIngredients.reduce((result, current) => result + current.price, 0) || 0, [mainIngredients]);
+  const totalCost = mainIngredients.reduce((result, current) => result + current.price, 0);
   const isOrderEmpty = useMemo(() => totalCost === 0, [totalCost]);
 
   useEffect(() => {
@@ -63,21 +62,12 @@ function BurgerConstructor() {
     }
 
     if (item.type === Types.BUN) {
-      dispatch({
-        type: ADD_INGREDIENT_TO_ORDER,
-        value: getIngredient(item, 'top'),
-      });
-      dispatch({
-        type: ADD_INGREDIENT_TO_ORDER,
-        value: getIngredient(item, 'bottom'),
-      });
+      dispatch(addIngredientToOrder(item, 'top'));
+      dispatch(addIngredientToOrder(item, 'bottom'));
       return;
     }
 
-    dispatch({
-      type: ADD_INGREDIENT_TO_ORDER,
-      value: getIngredient(item),
-    });
+    dispatch(addIngredientToOrder(item));
   }
   return (
     <section ref={drop} className={Styles.constructorSection}>

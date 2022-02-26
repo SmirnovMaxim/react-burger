@@ -1,18 +1,50 @@
-import {Dispatch} from 'redux';
 import {API} from '../../config/params';
 import {TConfirmRestorePasswordForm} from '../../types/forms';
-import {SET_ERROR} from './app';
+import {AppDispatch, AppThunk} from '../../types/stores/TRootStore';
+import {
+  CONFIRM_PASSWORD_RESET_ERROR,
+  CONFIRM_PASSWORD_RESET_REQUEST,
+  CONFIRM_PASSWORD_RESET_SUCCESS,
+  PASSWORD_RESET_ERROR,
+  PASSWORD_RESET_REQUEST,
+  PASSWORD_RESET_SUCCESS,
+} from '../constants';
+import {setError} from './app';
 
-export const PASSWORD_RESET_REQUEST = 'PASSWORD_RESET_REQUEST';
-export const PASSWORD_RESET_SUCCESS = 'PASSWORD_RESET_SUCCESS';
-export const PASSWORD_RESET_ERROR = 'PASSWORD_RESET_ERROR';
+export interface IConfirmPasswordResetErrorAction {
+  readonly type: typeof CONFIRM_PASSWORD_RESET_ERROR;
+}
 
-export const CONFIRM_PASSWORD_RESET_REQUEST = 'CONFIRM_PASSWORD_RESET_REQUEST';
-export const CONFIRM_PASSWORD_RESET_SUCCESS = 'CONFIRM_PASSWORD_RESET_SUCCESS';
-export const CONFIRM_PASSWORD_RESET_ERROR = 'CONFIRM_PASSWORD_RESET_ERROR';
+export interface IConfirmPasswordResetRequestAction {
+  readonly type: typeof CONFIRM_PASSWORD_RESET_REQUEST;
+}
 
-export const resetPassword = (email: string) => {
-  return async (dispatch: Dispatch<any>) => {
+export interface IConfirmPasswordResetSuccessAction {
+  readonly type: typeof CONFIRM_PASSWORD_RESET_SUCCESS;
+}
+
+export interface IPasswordResetErrorAction {
+  readonly type: typeof PASSWORD_RESET_ERROR;
+}
+
+export interface IPasswordResetRequestAction {
+  readonly type: typeof PASSWORD_RESET_REQUEST;
+}
+
+export interface IPasswordResetSuccessAction {
+  readonly type: typeof PASSWORD_RESET_SUCCESS;
+}
+
+export type TResetPasswordActions =
+  IConfirmPasswordResetErrorAction
+  | IConfirmPasswordResetRequestAction
+  | IConfirmPasswordResetSuccessAction
+  | IPasswordResetErrorAction
+  | IPasswordResetRequestAction
+  | IPasswordResetSuccessAction;
+
+export const resetPassword: AppThunk = (email: string) => {
+  return async (dispatch: AppDispatch) => {
     try {
       dispatch({type: PASSWORD_RESET_REQUEST});
       const response = await fetch(`${API}password-reset`, {
@@ -33,14 +65,14 @@ export const resetPassword = (email: string) => {
     } catch (e) {
       dispatch({type: PASSWORD_RESET_ERROR});
       if (e instanceof Error) {
-        dispatch({type: SET_ERROR, error: e.message});
+        dispatch(setError(e.message));
       }
     }
   }
 }
 
-export const confirmResetPassword = (form: TConfirmRestorePasswordForm) => {
-  return async (dispatch: Dispatch<any>) => {
+export const confirmResetPassword: AppThunk = (form: TConfirmRestorePasswordForm) => {
+  return async (dispatch: AppDispatch) => {
     try {
       dispatch({type: CONFIRM_PASSWORD_RESET_REQUEST});
       const response = await fetch(`${API}password-reset/reset`, {
@@ -62,7 +94,7 @@ export const confirmResetPassword = (form: TConfirmRestorePasswordForm) => {
     } catch (e) {
       dispatch({type: CONFIRM_PASSWORD_RESET_ERROR});
       if (e instanceof Error) {
-        dispatch({type: SET_ERROR, error: e.message});
+        dispatch(setError(e.message));
       }
     }
   }

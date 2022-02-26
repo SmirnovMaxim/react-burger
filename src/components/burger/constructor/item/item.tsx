@@ -4,7 +4,7 @@ import React, {FC, useRef} from 'react';
 import {useDrag, useDrop} from 'react-dnd';
 import {useDispatch} from 'react-redux';
 import {Types} from '../../../../enums';
-import {MOVE_INGREDIENTS, REMOVE_INGREDIENT_FROM_ORDER} from '../../../../services/actions/burgerConstructor';
+import {moveIngredients, removeIngredientFromOrder} from '../../../../services/actions/burgerConstructor';
 import {ConstructorItem as ConstructorItemType} from '../../../../types';
 import Styles from './item.module.css';
 
@@ -34,7 +34,7 @@ const ConstructorItem: FC<TConstructorItemProps> = (props) => {
     if (isBun) {
       return;
     }
-    dispatch({type: REMOVE_INGREDIENT_FROM_ORDER, value: props.uniqueId});
+    dispatch(removeIngredientFromOrder(props.uniqueId));
   }
   const onHover = (item: { index: number }): void => {
     if (!ref.current) {
@@ -48,7 +48,7 @@ const ConstructorItem: FC<TConstructorItemProps> = (props) => {
       return;
     }
 
-    dispatch({type: MOVE_INGREDIENTS, dragIndex, hoverIndex});
+    dispatch(moveIngredients(dragIndex, hoverIndex));
 
     item.index = hoverIndex;
   }

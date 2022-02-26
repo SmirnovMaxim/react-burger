@@ -2,8 +2,8 @@ import cn from 'classnames';
 import {useDispatch} from 'react-redux';
 import {NavLink, useHistory} from 'react-router-dom';
 import {Routes} from '../../enums';
-import Styles from '../../pages/profile.module.css';
-import {logout} from '../../services/actions/auth';
+import {logout} from '../../services/actions/user';
+import Styles from './sidebar.module.css';
 
 export const Sidebar = () => {
   const dispatch = useDispatch();

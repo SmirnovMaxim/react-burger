@@ -1,10 +1,9 @@
-import {useSelector} from 'react-redux';
 import {Redirect, Route} from 'react-router-dom';
 import {Routes} from '../../../enums';
-import {TRootStore} from '../../../types/stores';
+import {useSelector} from '../../../services/hooks';
 
 export const ProtectedRoute = ({children, ...rest}: any) => {
-  const user = useSelector((store: TRootStore) => store.user);
+  const user = useSelector(store => store.user);
 
   return (
     <Route
