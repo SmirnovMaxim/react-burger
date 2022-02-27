@@ -89,21 +89,26 @@ const App: FC = () => {
           <Route path={Routes.MAIN} component={MainPage} exact/>
           <Route path={Routes.INGREDIENT_VIEW} component={IngredientPage} exact/>
 
+          <ProtectedRoute path={Routes.PROFILE_ORDER_VIEW} exact>
+            <OrderViewPage/>
+          </ProtectedRoute>
           <ProtectedRoute path={Routes.PROFILE}>
             <ProfilePage/>
           </ProtectedRoute>
-          <ProtectedRoute path={Routes.PROFILE_ORDER_LIST}>
+          <ProtectedRoute path={Routes.PROFILE_ORDER_LIST} exact>
             <OrderListPage/>
-          </ProtectedRoute>
-          <ProtectedRoute path={Routes.PROFILE_ORDER_VIEW}>
-            <OrderViewPage/>
           </ProtectedRoute>
 
           <Route component={NotFoundPage}/>
         </Switch>
         {isModalOpen && <Route path={Routes.INGREDIENT_VIEW} component={ModalIngredientDetails} exact/>}
         {isModalOpen && <Route path={Routes.FEED_VIEW} component={ModalOrderDetails} exact/>}
-        {isModalOpen && <Route path={Routes.PROFILE_ORDER_VIEW} component={ModalOrderDetails} exact/>}
+        {
+          isModalOpen &&
+          <ProtectedRoute path={Routes.PROFILE_ORDER_VIEW} exact>
+            <ModalOrderDetails/>
+          </ProtectedRoute>
+        }
       </main>
     </div>
   );

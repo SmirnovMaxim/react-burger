@@ -1,9 +1,8 @@
 import {Button, EmailInput, Input, PasswordInput} from '@ya.praktikum/react-developer-burger-ui-components';
 import {ChangeEvent, SyntheticEvent, useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import Styles from './edit-profile.module.css';
 import {updateUser} from '../../services/actions/user';
-import {useSelector} from '../../services/hooks';
+import {useDispatch, useSelector} from '../../services/hooks';
 import {TUserStore} from '../../types/stores';
 
 export const EditProfile = () => {

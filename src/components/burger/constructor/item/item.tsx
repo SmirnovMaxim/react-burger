@@ -2,9 +2,9 @@ import {ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger
 import cn from 'classnames';
 import React, {FC, useRef} from 'react';
 import {useDrag, useDrop} from 'react-dnd';
-import {useDispatch} from 'react-redux';
 import {Types} from '../../../../enums';
 import {moveIngredients, removeIngredientFromOrder} from '../../../../services/actions/burgerConstructor';
+import {useDispatch} from '../../../../services/hooks';
 import {ConstructorItem as ConstructorItemType} from '../../../../types';
 import Styles from './item.module.css';
 
