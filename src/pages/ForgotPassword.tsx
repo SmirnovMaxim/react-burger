@@ -1,10 +1,9 @@
 import {Button, EmailInput} from '@ya.praktikum/react-developer-burger-ui-components';
 import {SyntheticEvent, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Routes} from '../enums';
 import {resetPassword} from '../services/actions/resetPassword';
-import {TRootStore} from '../types/stores';
+import {useDispatch, useSelector} from '../services/hooks';
 import './common.css';
 import Styles from './login.module.css';
 
@@ -12,7 +11,7 @@ export const ForgotPasswordPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const {pathname} = useLocation();
-  const {isSendForgotPassword} = useSelector((store: TRootStore) => store.resetPassword);
+  const {isSendForgotPassword} = useSelector(store => store.resetPassword);
   const [email, setEmail] = useState<string>('');
 
   const onChange = (e: any): void => {
