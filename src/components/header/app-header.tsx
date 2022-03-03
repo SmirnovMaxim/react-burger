@@ -16,7 +16,7 @@ function AppHeader() {
           </NavLink>
         </div>
         <div className={Styles.item}>
-          <NavLink to={Routes.MAIN} activeClassName={Styles.activeLink} className={cn(Styles.link, 'text_color_inactive')} exact>
+          <NavLink to={Routes.FEED} activeClassName={Styles.activeLink} className={cn(Styles.link, 'text_color_inactive')} exact>
             <ListIcon type="secondary"/>
             <span>Лента заказов</span>
           </NavLink>

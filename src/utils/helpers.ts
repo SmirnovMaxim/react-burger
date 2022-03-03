@@ -1,9 +1,17 @@
+import dayjs from 'dayjs';
 // @ts-ignore
 import {v4 as uuidv4} from 'uuid';
-import {API} from '../config/params';
 import {Types} from '../enums';
 import {ConstructorItem, Ingredient} from '../types';
-import {TTokenResponse} from '../types/responses';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import isToday from 'dayjs/plugin/isToday';
+import isYesterday from 'dayjs/plugin/isYesterday';
+import 'dayjs/locale/ru';
+
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+dayjs.extend(relativeTime);
+dayjs.locale('ru');
 
 const getIngredient = (item: Ingredient, position?: 'top' | 'bottom'): ConstructorItem => {
   let text: string;
@@ -65,35 +73,27 @@ const getCookie = (name: string): string | undefined => {
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-const setAccessToken = (token: string): void => {
-  setCookie('accessToken', token, {'max-age': 1200});
-}
+const formatDate = (date: string): string => {
+  const dayjsDate = dayjs(date);
+  const zone = dayjsDate.format('Z')
+    .split(':')[0]
+    .replace('0', '');
 
-const updateToken = async (token: string): Promise<void> => {
-  const response = await fetch(`${API}auth/token`, {
-    method: 'POST',
-    body: JSON.stringify({token}),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (!response.ok) {
-    return;
-  }
-  const {success, refreshToken, accessToken} = await response.json() as TTokenResponse;
-  if (!success) {
-    throw new Error('Failed updating token');
+  let result = `${dayjsDate.format('HH:mm')} i-GMT${zone}`;
+
+  if (dayjsDate.isToday()) {
+    return `Сегодня, ${result}`;
+  } else if (dayjsDate.isYesterday()) {
+    return `Вчера, ${result}`;
   }
 
-  localStorage.setItem('refreshToken', refreshToken);
-  setAccessToken(accessToken.split(' ')[1]);
+  return `${dayjsDate.fromNow()}, ${result}`;
 }
 
 export {
   getIngredient,
-  setAccessToken,
   setCookie,
   getCookie,
   deleteCookie,
-  updateToken,
+  formatDate,
 };

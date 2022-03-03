@@ -1,9 +1,8 @@
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import React, {RefObject, SyntheticEvent, useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
 import {Types} from '../../../../enums';
+import {useSelector} from '../../../../services/hooks';
 import {Coords, GroupIngredient, Tab as TabType} from '../../../../types';
-import {TRootStore} from '../../../../types/stores';
 import IngredientGroup from '../group/ingredient-group';
 import Styles from './burger-ingredients.module.css';
 
@@ -30,7 +29,7 @@ function BurgerIngredients() {
     },
   ]);
 
-  const {ingredients} = useSelector((store: TRootStore) => ({
+  const {ingredients} = useSelector((store) => ({
     ingredients: store.app.ingredients,
     showModal: store.detailModal.showModal,
   }));

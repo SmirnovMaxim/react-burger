@@ -1,5 +1,7 @@
 enum Routes {
   MAIN = '/',
+  FEED = '/feed',
+  FEED_VIEW = '/feed/:id',
   LOGIN = '/login',
   SIGNUP = '/register',
   FORGOT_PASSWORD = '/forgot-password',

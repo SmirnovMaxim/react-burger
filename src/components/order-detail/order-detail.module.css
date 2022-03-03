@@ -1,0 +1,93 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-right: 10px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    max-height: 328px;
+    margin-right: -24px;
+}
+
+.container::-webkit-scrollbar {
+    width: 8px; /* ширина scrollbar */
+}
+
+.container::-webkit-scrollbar-track {
+    background: #2F2F37; /* цвет дорожки */
+}
+
+.container::-webkit-scrollbar-thumb {
+    background-color: #8585AD; /* цвет плашки */
+}
+
+.orderDetail {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 640px;
+    margin: 120px auto 60px;
+}
+
+.orderNumber {
+    text-align: center;
+}
+
+.orderName h2 {
+    margin: 0 0 12px;
+}
+
+.done {
+    color: #00CCCC;
+}
+
+.receipt {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-right: 24px;
+}
+
+.receipt h2 {
+    margin: 0 0 24px;
+}
+
+.imgBlock {
+    width: 60px;
+    height: 60px;
+    border: solid 2px transparent;
+    border-radius: 100px;
+    background-image: linear-gradient(black, black), radial-gradient(circle at top left, #801AB3, #4C4CFF);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    display: inline-block;
+}
+
+.imgBlock img {
+    height: 56px;
+    position: relative;
+    top: 2px;
+    left: -25px;
+}
+
+.ingredient {
+    display: flex;
+    align-items: center;
+    gap: 16px
+}
+
+.ingredientName {
+    flex: 1;
+}
+
+.price {
+    font-size: 28px;
+    display: flex;
+    gap: 9px;
+    align-items: center;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+}

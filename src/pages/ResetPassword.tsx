@@ -1,11 +1,10 @@
 import {Button, Input, PasswordInput} from '@ya.praktikum/react-developer-burger-ui-components';
 import {ChangeEvent, SyntheticEvent, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Routes} from '../enums';
 import {confirmResetPassword} from '../services/actions/resetPassword';
+import {useDispatch, useSelector} from '../services/hooks';
 import {TConfirmRestorePasswordForm} from '../types/forms';
-import {TRootStore} from '../types/stores';
 import './common.css';
 import Styles from './login.module.css';
 
@@ -13,7 +12,7 @@ export const ResetPasswordPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const {state} = useLocation();
-  const {isSendForgotPassword} = useSelector((store: TRootStore) => store.resetPassword);
+  const {isSendForgotPassword} = useSelector(store => store.resetPassword);
   const [form, setForm] = useState<TConfirmRestorePasswordForm>({
     password: '',
     token: '',

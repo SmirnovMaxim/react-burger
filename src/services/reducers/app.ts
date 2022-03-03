@@ -1,13 +1,14 @@
-import {CombinedState} from 'redux';
+import {Reducer} from 'redux';
 import {TAppStore} from '../../types/stores';
-import {FETCH_INGREDIENTS_ERROR, FETCH_INGREDIENTS_SUCCESS, RESET_ERROR, SET_ERROR} from '../actions/app';
+import {TAppActions} from '../actions/app';
+import {FETCH_INGREDIENTS_ERROR, FETCH_INGREDIENTS_SUCCESS, RESET_ERROR, SET_ERROR} from '../constants';
 
 const initialState: TAppStore = {
   error: null,
   ingredients: [],
 }
 
-export const app = (state: CombinedState<TAppStore> = initialState, action: any): TAppStore => {
+export const app: Reducer<TAppStore, TAppActions> = (state = initialState, action): TAppStore => {
   switch (action.type) {
     case SET_ERROR:
       return {...state, error: action.error};

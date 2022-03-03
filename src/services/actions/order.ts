@@ -1,16 +1,37 @@
-import {Dispatch} from 'redux';
 import {API} from '../../config/params';
 import {ConstructorItem, Order} from '../../types';
-import {getCookie, updateToken} from '../../utils/helpers';
-import {SET_ERROR} from './app';
-import {SET_NUMBER} from './burgerConstructor';
+import {AppDispatch, AppThunk} from '../../types/stores/TRootStore';
+import {updateToken} from '../../utils/auth';
+import {getCookie} from '../../utils/helpers';
+import {CREATE_ORDER_ERROR, CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS} from '../constants';
+import {setError} from './app';
+import {setNumber} from './burgerConstructor';
 
-export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
-export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
-export const CREATE_ORDER_ERROR = 'CREATE_ORDER_ERROR';
+export interface ICreateOrderError {
+  readonly type: typeof CREATE_ORDER_ERROR;
+}
 
-export const createOrder = (ingredients: ConstructorItem[]) => {
-  return async (dispatch: Dispatch<any>) => {
+export interface ICreateOrderRequestAction {
+  readonly type: typeof CREATE_ORDER_REQUEST;
+}
+
+export interface ICreateOrderSuccessAction {
+  readonly type: typeof CREATE_ORDER_SUCCESS;
+  readonly order: Order;
+}
+
+export type TOrderActions =
+  ICreateOrderError
+  | ICreateOrderRequestAction
+  | ICreateOrderSuccessAction;
+
+export const createOrderSuccess = (order: Order): ICreateOrderSuccessAction => ({
+  type: CREATE_ORDER_SUCCESS,
+  order,
+});
+
+export const createOrder: AppThunk = (ingredients: ConstructorItem[]) => {
+  return async (dispatch: AppDispatch) => {
     try {
       dispatch({type: CREATE_ORDER_REQUEST});
       let token = getCookie('accessToken');
@@ -45,12 +66,12 @@ export const createOrder = (ingredients: ConstructorItem[]) => {
       }
       const order: Order = {number: data.number, ingredients};
 
-      dispatch({type: SET_NUMBER, number: order.number});
-      dispatch({type: CREATE_ORDER_SUCCESS, order});
+      dispatch(setNumber(order.number));
+      dispatch(createOrderSuccess(order));
     } catch (e) {
       dispatch({type: CREATE_ORDER_ERROR});
       if (e instanceof Error) {
-        dispatch({type: SET_ERROR, error: e.message});
+        dispatch(setError(e.message));
       }
     }
   }

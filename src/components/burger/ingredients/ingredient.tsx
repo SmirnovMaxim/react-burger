@@ -2,19 +2,18 @@ import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-com
 import cn from 'classnames';
 import React, {FC, memo, useCallback} from 'react';
 import {useDrag} from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Routes} from '../../../enums';
-import {SET_INGREDIENT, TOGGLE_MODAL} from '../../../services/actions/detailModal';
+import {setIngredient, toggleModal} from '../../../services/actions/detailModal';
+import {useDispatch, useSelector} from '../../../services/hooks';
 import {Ingredient as IngredientType} from '../../../types';
-import {TRootStore} from '../../../types/stores';
 import Styles from './ingredient.module.css';
 
 const Ingredient: FC<IngredientType> = memo((props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-  const counter = useSelector((store: TRootStore) => {
+  const counter = useSelector((store) => {
     return store.burgerConstructor.currentOrder?.ingredients.filter(_ => _.id === props._id)?.length || 0;
   });
   const [, drag] = useDrag(() => ({
@@ -22,8 +21,8 @@ const Ingredient: FC<IngredientType> = memo((props) => {
     item: {id: props._id},
   }));
   const onShowDetails = useCallback(() => {
-    dispatch({type: SET_INGREDIENT, ingredient: props});
-    dispatch({type: TOGGLE_MODAL, value: true});
+    dispatch(setIngredient(props));
+    dispatch(toggleModal(true));
 
     history.replace({
       pathname: Routes.INGREDIENT_VIEW.replace(/:id/, props._id),

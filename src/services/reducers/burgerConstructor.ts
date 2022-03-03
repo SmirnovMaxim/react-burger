@@ -1,20 +1,21 @@
-import {CombinedState} from 'redux';
+import {Reducer} from 'redux';
 import {Types} from '../../enums';
 import {ConstructorItem} from '../../types';
 import TBurgerConstructorStore from '../../types/stores/TBurgerConstructorStore';
+import {TBurgerConstructorActions} from '../actions/burgerConstructor';
 import {
   ADD_INGREDIENT_TO_ORDER,
   MOVE_INGREDIENTS,
   REMOVE_INGREDIENT_FROM_ORDER,
   RESET_CURRENT_ORDER,
   SET_NUMBER,
-} from '../actions/burgerConstructor';
+} from '../constants';
 
 const initialState: TBurgerConstructorStore = {
   currentOrder: null,
 }
 
-export const burgerConstructor = (state: CombinedState<TBurgerConstructorStore> = initialState, action: any): TBurgerConstructorStore => {
+export const burgerConstructor: Reducer<TBurgerConstructorStore, TBurgerConstructorActions> = (state = initialState, action): TBurgerConstructorStore => {
   switch (action.type) {
     case RESET_CURRENT_ORDER:
       return initialState;

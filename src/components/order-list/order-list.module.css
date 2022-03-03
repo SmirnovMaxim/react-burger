@@ -1,0 +1,20 @@
+.orderContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-right: 10px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.orderContainer::-webkit-scrollbar {
+    width: 8px; /* ширина scrollbar */
+}
+
+.orderContainer::-webkit-scrollbar-track {
+    background: #2F2F37; /* цвет дорожки */
+}
+
+.orderContainer::-webkit-scrollbar-thumb {
+    background-color: #8585AD; /* цвет плашки */
+}

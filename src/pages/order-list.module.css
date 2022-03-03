@@ -1,0 +1,5 @@
+.orderContainer {
+    height: calc(100vh - 150px);
+    margin-top: 40px;
+    width: 844px;
+}
