@@ -70,7 +70,7 @@ function BurgerConstructor() {
     dispatch(addIngredientToOrder(item));
   }
   return (
-    <section ref={drop} className={Styles.constructorSection}>
+    <section ref={drop} className={Styles.constructorSection} data-test-id="constructor">
       {
         isOrderEmpty
           ?
