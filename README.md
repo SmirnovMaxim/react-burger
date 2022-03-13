@@ -7,7 +7,12 @@
   </p>
 </p>
 
-![Downloads](https://img.shields.io/github/downloads/SmirnovMaxim/react-burger/total) ![Contributors](https://img.shields.io/github/contributors/SmirnovMaxim/react-burger?color=dark-green) ![Forks](https://img.shields.io/github/forks/SmirnovMaxim/react-burger?style=social) ![Stargazers](https://img.shields.io/github/stars/SmirnovMaxim/react-burger?style=social) ![Issues](https://img.shields.io/github/issues/SmirnovMaxim/react-burger) ![License](https://img.shields.io/github/license/SmirnovMaxim/react-burger)
+![Downloads](https://img.shields.io/github/downloads/SmirnovMaxim/react-burger/total)
+![Contributors](https://img.shields.io/github/contributors/SmirnovMaxim/react-burger?color=dark-green)
+![Issues](https://img.shields.io/github/issues/SmirnovMaxim/react-burger)
+![example workflow](https://github.com/SmirnovMaxim/react-burger/actions/workflows/test.yml/badge.svg?branch=sprint-6/step-1)
+![Forks](https://img.shields.io/github/forks/SmirnovMaxim/react-burger?style=social)
+![Stargazers](https://img.shields.io/github/stars/SmirnovMaxim/react-burger?style=social)
 
 ## Table Of Contents
 
