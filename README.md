@@ -3,7 +3,7 @@
   <h3 align="center">React burger app</h3>
 
   <p align="center">
-    <a href="https://max.nomoredomains.work/feed">View Demo</a>
+    <a href="https://max.nomoredomains.work">View Demo</a>
   </p>
 </p>
 
