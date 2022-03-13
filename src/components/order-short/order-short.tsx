@@ -21,7 +21,7 @@ export const OrderShort = ({order, route}: TOrderShortProps) => {
 
   const appIngredients = useSelector(store => store.app.ingredients);
 
-  const ingredients = order.ingredients.map((id) => {
+  const ingredients = order.ingredients.filter(_ => _).map((id) => {
     const ingredient = appIngredients.find(_ => _._id === id)!;
     return {
       url: ingredient.image_mobile,
