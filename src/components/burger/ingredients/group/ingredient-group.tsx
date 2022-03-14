@@ -12,7 +12,7 @@ const IngredientGroup: FC<IProps> = ({ group }) => {
   return (
     <>
       <h2 id={group.type}>{group.name}</h2>
-      <div className={Styles.ingredients}>
+      <div className={Styles.ingredients} data-test-id="ingredientGroup">
         {group.items.map((ingredient: IngredientType) => (
           <Ingredient key={ingredient._id} {...ingredient}/>
         ))}

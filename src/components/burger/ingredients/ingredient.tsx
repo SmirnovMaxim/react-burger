@@ -31,12 +31,12 @@ const Ingredient: FC<IngredientType> = memo((props) => {
   }, [dispatch, props, history, location]);
 
   return (
-    <div className={cn('text text_type_main-default p-4', Styles.ingredient)} onClick={onShowDetails}>
+    <div className={cn('text text_type_main-default p-4', Styles.ingredient)} onClick={onShowDetails} data-test-id="ingredient">
       {counter > 0 && <Counter count={counter}/>}
       <div ref={drag} className={Styles.content}>
         <img src={props.image} alt={props.name}/>
         <div>
-          <span className={`${Styles.price} mr-3`}>{props.price}</span>
+          <span className={`${Styles.price} mr-3`} data-test-id="price">{props.price}</span>
           <CurrencyIcon type="primary"/>
         </div>
         <div>{props.name}</div>

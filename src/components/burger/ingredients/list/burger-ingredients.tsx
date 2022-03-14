@@ -96,7 +96,7 @@ function BurgerIngredients() {
   return (
     <section className={Styles.list}>
       <h1 className={Styles.title}>Соберите бургер</h1>
-      <div className={Styles.tabBlock}>
+      <div className={Styles.tabBlock} data-test-id="ingredientTabs">
         {tabs.map((tab) => (
           <Tab key={tab.type} value={tab.name} active={isActiveTab(tab.type)}
                onClick={() => onChangeTab(tab)}>
